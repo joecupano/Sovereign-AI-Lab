@@ -1,14 +1,14 @@
 # Bare-Metal
 
-- Installer script: `build-sovereign-ai-lab.sh`
+- Installer script: `build_bare-metal.sh`
 
 ## Usage
 
 From the `build/bare-metal` directory:
 
 ```bash
-chmod +x build-sovereign-ai-lab.sh
-./build-sovereign-ai-lab.sh
+chmod +x build_bare-metal.sh
+./build_bare-metal.sh
 ```
 
 ## What the script does
