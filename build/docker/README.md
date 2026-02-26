@@ -1,8 +1,21 @@
-# AirGap Lab AI
+# Docker
 
 Containerized Retrieval-Augmented Generation platform for domain-specific AI assistants, designed for fully local lab use. **No external AI services required** - all inference runs locally using Ollama.
 
 Each deployment can be configured for a different use case (prompt behavior, corpus, and model settings) while reusing the same stack.
+
+## Quick Start
+
+```bash
+# 1) Detect host hardware, generate .env + docker-compose-thislab.yml, build images
+./build_docker.sh
+
+# 2) Start containers
+docker compose -f docker-compose-thislab.yml up -d
+
+# 3) Verify API health
+curl http://localhost:8000/health
+```
 
 ## Platform Overview
 
@@ -30,26 +43,27 @@ Default endpoints:
 - Recommended: 16–32 GB RAM for 7B models
 - Optional: NVIDIA GPU with CUDA for accelerated inference
 
-### 2) Configure environment
+### 2) Detect host + generate build artifacts
 
-Choose a configuration template based on your hardware:
+Run the build helper:
 
 ```bash
-# For 16GB RAM (CPU only)
-cp .env.cpu-16gb .env
-
-# For 32GB RAM (CPU only)
-cp .env.cpu-32gb .env
-
-# For 64GB RAM (CPU only)
-cp .env.cpu-64gb .env
-
-# For GPU with 6GB VRAM + 64GB RAM
-cp .env.gpu-6gb-64gb .env
-
-# Or start from the documented template
-cp .env.template .env
+./build_docker.sh
 ```
+
+`build_docker.sh` performs the following:
+- Detects CPU, thread count, RAM size, and GPU vendor (NVIDIA/AMD/Intel/none)
+- Installs missing GPU drivers/support packages when needed (Debian/Ubuntu)
+- Generates `.env` from detected hardware profile
+- Generates `docker-compose-thislab.yml` (resolved compose for this host)
+- Builds Docker images
+- **Does not start containers**
+
+Generated files:
+- `.env`
+- `docker-compose-thislab.yml`
+
+You can still manually copy one of the profile templates (`.env.cpu-16gb`, `.env.cpu-32gb`, `.env.cpu-64gb`, `.env.gpu-6gb-64gb`, `.env.template`) if you prefer fully manual configuration.
 
 Common `.env` settings:
 
@@ -64,18 +78,15 @@ Common `.env` settings:
 
 See `.env.template` for full documentation of all options.
 
-### 3) Start stack
+### 3) Start stack (after build)
 
 ```bash
-docker compose up --build -d
+docker compose -f docker-compose-thislab.yml up -d
 ```
 
-Optional scripted setup (same flow as above):
+Alternative startup helper:
 
 ```bash
-# Choose profile and run install flow
-./install.sh cpu-16gb
-
 # Optional GPU-safe startup (requires NVIDIA Container Toolkit)
 ./start-stack.sh --gpu
 
@@ -88,6 +99,8 @@ Optional scripted setup (same flow as above):
 # Fail fast if GPU verification does not pass
 ./start-stack.sh --gpu --strict-gpu-verify
 ```
+
+`start-stack.sh` starts containers directly. Use it when you want runtime checks and GPU toolkit/runtime validation during startup.
 
 When run with `--gpu`, `start-stack.sh` auto-detects NVIDIA/AMD and checks required container runtime prerequisites. On Debian/Ubuntu, it can prompt to install missing toolkit/runtime dependencies, or install automatically with `--install-toolkit`.
 After startup, it prints a vendor-specific GPU verification status for the `airgap-ollama` container.
@@ -197,15 +210,18 @@ Maximum upload size: **250MB** per request (configurable in `ui/nginx.conf`).
 
 ```bash
 # Restart stack
-docker compose up --build -d
+docker compose -f docker-compose-thislab.yml up -d
 
 # View logs
-docker compose logs -f rag-api
-docker compose logs -f web-ui
-docker compose logs -f ollama
+docker compose -f docker-compose-thislab.yml logs -f rag-api
+docker compose -f docker-compose-thislab.yml logs -f web-ui
+docker compose -f docker-compose-thislab.yml logs -f ollama
 
 # Stop stack
-docker compose down
+docker compose -f docker-compose-thislab.yml down
+
+# Rebuild images only (no container start)
+./build_docker.sh
 ```
 
 ## Developer Guidance
@@ -233,6 +249,7 @@ docker compose down
 │       └── uploads/         # User-uploaded files
 ├── index/                   # Vector index files (rebuildable)
 ├── docker-compose.yml       # Service topology and mounts
+├── docker-compose-thislab.yml # Generated host-specific compose file
 ├── .env.template            # Documented configuration template
 ├── .env.cpu-16gb            # Optimized config for 16GB RAM
 ├── .env.cpu-32gb            # Optimized config for 32GB RAM
@@ -247,7 +264,7 @@ docker compose down
 python3 -m compileall app/src
 
 # Rebuild/restart after changes
-docker compose up --build -d
+docker compose -f docker-compose-thislab.yml up --build -d
 ```
 
 ### API contract summary
@@ -320,8 +337,8 @@ Checks:
 Useful commands:
 
 ```bash
-docker compose logs -f rag-api
-docker compose logs -f web-ui
+docker compose -f docker-compose-thislab.yml logs -f rag-api
+docker compose -f docker-compose-thislab.yml logs -f web-ui
 ```
 
 ### Answers are generic or not grounded
@@ -342,7 +359,7 @@ Fix:
 
 ```bash
 docker exec -it airgap-ollama ollama pull <model-tag>
-docker compose up --build -d
+docker compose -f docker-compose-thislab.yml up --build -d
 ```
 
 Or disable strict mode in `.env`:
@@ -361,7 +378,7 @@ Checks:
 Fix:
 
 ```bash
-docker compose up --build -d
+docker compose -f docker-compose-thislab.yml up --build -d
 ```
 
 Then hard-refresh browser (`Ctrl+Shift+R`).
@@ -376,7 +393,7 @@ Fix:
 - To increase, edit `client_max_body_size` in `ui/nginx.conf` and rebuild:
 
 ```bash
-docker compose build web-ui && docker compose up -d web-ui
+docker compose -f docker-compose-thislab.yml build web-ui && docker compose -f docker-compose-thislab.yml up -d web-ui
 ```
 
 ### Backend container keeps restarting
@@ -393,7 +410,7 @@ docker logs airgap-rag-api --tail 30
 Fix:
 - Pull the required model: `docker exec airgap-ollama ollama pull <model>`
 - Or set `OFFLINE_STRICT=0` and `OLLAMA_AUTO_PULL=1` in `.env`
-- Then restart: `docker compose up -d rag-api`
+- Then restart: `docker compose -f docker-compose-thislab.yml up -d rag-api`
 
 ## License
 
