@@ -1,0 +1,77 @@
+name: docker
+services:
+  ollama:
+    container_name: airgap-ollama
+    image: ollama/ollama:latest
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 11434
+        published: "11434"
+        protocol: tcp
+    restart: unless-stopped
+    volumes:
+      - type: volume
+        source: ollama_data
+        target: /root/.ollama
+        volume: {}
+  rag-api:
+    build:
+      context: /home/pi/source/sovereign-ai-lab/build/docker/app
+      dockerfile: Dockerfile
+    container_name: airgap-rag-api
+    depends_on:
+      ollama:
+        condition: service_started
+        required: true
+    environment:
+      CORPUS_PATH: /workspace/data/corpus
+      OFFLINE_STRICT: "0"
+      OLLAMA_AUTO_PULL: "1"
+      OLLAMA_HOST: http://ollama:11434
+      OLLAMA_MODEL: auto
+      TOP_K: "4"
+      VECTOR_STORE_PATH: /workspace/index
+    image: airgap-lab-ai-rag-api:latest
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 8000
+        published: "8000"
+        protocol: tcp
+    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: /home/pi/source/sovereign-ai-lab/build/docker/data
+        target: /workspace/data
+        bind: {}
+      - type: bind
+        source: /home/pi/source/sovereign-ai-lab/build/docker/index
+        target: /workspace/index
+        bind: {}
+  web-ui:
+    build:
+      context: /home/pi/source/sovereign-ai-lab/build/docker/ui
+      dockerfile: Dockerfile
+    container_name: airgap-web-ui
+    depends_on:
+      rag-api:
+        condition: service_started
+        required: true
+    image: airgap-lab-ai-web-ui:latest
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 80
+        published: "8080"
+        protocol: tcp
+    restart: unless-stopped
+networks:
+  default:
+    name: docker_default
+volumes:
+  ollama_data:
+    name: docker_ollama_data

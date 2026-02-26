@@ -8,7 +8,7 @@ COMPOSE_FILE="docker-compose-thislab.yml"
 
 usage() {
   cat <<'EOF'
-Usage: ./start_stack.sh <create|start|stop|delete|status|restart>
+Usage: ./ai-stack.sh <create|start|stop|delete|status|restart>
 
 Commands:
   create   Create containers from docker-compose-thislab.yml (do not start)
