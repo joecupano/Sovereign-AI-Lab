@@ -62,13 +62,20 @@ sudo ubuntu-drivers autoinstall
 sudo apt install build-essential git gcc cmake curl nvtop btop -y
 ```
 
-To make use of lab scripts, clone the Sovereign AI Lab repo into your home directory on the server
+## Install Software Stack (Automated)
+To make use of the install script you need to perform the following from the home directory on the server 
 
 ```
 git clone https://github.com/joecupano/sovereign-ai-lab
+cd sovereign-ai-lab
+./build_bare-metal.sh
 ```
+The remaining software layers will be installed
 
-## GPU Utilities Installation
+## Install Software Stack (Manual) 
+Good for you in being adventurous.
+
+### GPU Utilities Installation
 Next step is to install utilities specific to your GPU:
 
 For NVIDIA
@@ -91,7 +98,7 @@ sudo usermod -aG video \$USER
 sudo usermod -aG render \$USER
 sudo reboot
 ```
-### Verify the GPU Hardware after reboot then run:
+Verify the GPU Hardware after reboot then run:
 
 For NVIDIA
 ```
@@ -107,30 +114,16 @@ You should see a table similar to the following displaying your GPU and its VRAM
 
 ![nvidia-smi output](https://raw.githubusercontent.com/wiki/joecupano/sovereign-ai-course/pix/Lab1_nvidiasmi-3050.png "nvidia-smi output")
 
-## Python Environment and Utilities:**
+### Python Environment and Utilities
 Next step is to install Python environment and its utilities:
 
 ```
 sudo apt install python3-pip python3-venv python3-dev -y
 ```
-## Software
-On top of the operating system we install the layers of software that comprise the AI stack: 
 
-The stack will include:
-
-| **Layer**             | Detail                |
-|-----------------------|-----------------------|
-| GPU utilities         | NVIDIA or AMD         |
-| Runtime               | Python and Libraries  |
-| LLM Orchestration     | [Ollama](https://ollama.com/)                |
-| LLM Model             | [IBM Granite4:3b](https://ollama.com/library/granite4:3b)      |
-
-
-### Step 3: Engine (Ollama)
+### Inference/Model Server (Ollama)
 
 Next, we install the Ollama engine. It will run as a system service and by default automatically detect your GPU and use it.
-
-1.  **Install Ollama:**
 
 ```
 curl -fsSL https://ollama.com/install.sh \| sh
@@ -138,8 +131,7 @@ curl -fsSL https://ollama.com/install.sh \| sh
 
 ![Ollama install](https://raw.githubusercontent.com/wiki/joecupano/sovereign-ai-course/pix/Lab1_Ollama-Install.png "Ollama install")
 
-
-2.  **Verification:** Run the following:
+Once install run the following to verif ollama is running
 
 ```
 systemctl status ollama
@@ -149,8 +141,7 @@ systemctl status ollama
 
 It should say **"active (running).**
 
-### Step 4: LLM (IBM Granite)
-
+### LLM Model (IBM Granite)
 Next, we download our first LLM. Given our focus on supply chain we will use **IBM Granite**.
 
 IBM provides a "clear box" approach by disclosing its **full data provenance**. It recently earned a **95% score** on Stanford’s Foundation Model Transparency Index (FMTI) which is the highest ever recorded. Unlike **"black box"** models, IBM reveals the exact filtering, cleansing, and curation steps used to vet its 12+ trillion tokens for governance, risk, and bias.
@@ -159,17 +150,13 @@ Because IBM has such detailed documentation of its "Data Supply Chain," it offer
 
 We will be using Granite 3.0 8B Instruct**.** This "workhorse" model is optimized for the lab hardware specifications. It excels at structured tasks like RAG (Retrieval-Augmented Generation) and tool-calling, making it ideal to build reliable local AI applications.
 
-With Ollama already running as a system service, we next pull and run a model.
-
-1.  **Pull the Model:**
+With Ollama already running as a system service, we pull and run the IBM Granite 4 model.
 
 ```
 ollama pull granite4:3b
 ```
 
 ![Ollama pull](https://raw.githubusercontent.com/wiki/joecupano/sovereign-ai-course/pix/Lab1_Ollama-Pull.png "Ollama pull")
-
-2.  **Run the Model:**
 
 ```
 ollama run granite4:3b
