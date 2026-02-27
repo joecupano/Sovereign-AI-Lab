@@ -198,6 +198,7 @@ echo -e "${SUCCESS_COLOR}                                                       
 cat <<'EOF'
 
 Installation complete.
+
 System needs to reboot for all changes to occur
 Reboot will begin in 15 seconsds unless CTRL-C hit"
 
