@@ -13,10 +13,10 @@ The technology stack used in the production and testing of the labs was a **Dell
 All software choices are open source. The **IBM Granite 4.3** LLM was chosen based on transparency and tracebility in satsifying **Supply Chain of Custody**. The IBM Granite 4.0 family LLM models have the strongest, most independently‑verified transparency as verified by [Stanford CRFM](https://crfm.stanford.edu/). It documents that IBM discloses 2.5 trillion training tokens, 20 named data sources, and other governance details. Other rated LLMs are mentioned in the **LLM Transparency section**.
 
 **[Lab 1 - Build the Lab](Lab-1.md)**
-- [Step 1: OS Layer (Ubuntu 24.04)](Lab-1,md#step-1-os-layer-ubuntu-2404-desktop-lts)
-- [Step 2: Drivers (NVIDIA)](Lab-1,md#step-2-drivers-nvidia)
-- [Step 3: Engine (Ollama)](Lab-1,md#step-3-engine-ollama)
-- [Step 4: LLM (IBM Granite)](Lab-1,md#step-4-llm-ibm-granite)
+- [Step 1: OS Layer (Ubuntu 24.04)](Lab-1.md#step-1-os-layer-ubuntu-2404-desktop-lts)
+- [Step 2: Drivers (NVIDIA)](Lab-1.md#step-2-drivers-nvidia)
+- [Step 3: Engine (Ollama)](Lab-1.md#step-3-engine-ollama)
+- [Step 4: LLM (IBM Granite)](Lab-1.md#step-4-llm-ibm-granite)
 
 **[Lab 2 - CPU vs GPU](Lab-2.md)**
 - [Step 1: Setup](Lab-2.md#step-1-setup)
