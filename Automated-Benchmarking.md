@@ -25,7 +25,7 @@ import csv
 from datetime import datetime
 
 # Setup configuration
-MODEL = "granite3.3:8b"
+MODEL = "granite4:3b"
 PROMPT = "Explain the importance of semiconductors in 3 sentences."
 OUTPUT_FILE = "ai_performance_log.csv"
 
