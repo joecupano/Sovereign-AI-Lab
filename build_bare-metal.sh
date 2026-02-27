@@ -197,8 +197,12 @@ echo -e "${SUCCESS_COLOR}                                                       
 
 cat <<'EOF'
 
-With everything installed, you can now run the LLM using
-the following command to enter a chat prompt session with the model:
+Installation complete.
+System needs to reboot for all changes to occur
+Reboot will begin in 15 seconsds unless CTRL-C hit"
+
+After reboot you can use the following command to enter
+a chat prompt session with the model:
 
 ollama run granite4:3b
 
@@ -209,6 +213,6 @@ EOF
 echo -e "${SUCCESS_COLOR}                                                        "
 echo -e "${BANNER_RESET}"
 echo " "
-
-
-
+sleep 15
+sudo sync
+sudo reboot
