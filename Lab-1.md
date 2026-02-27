@@ -1,4 +1,4 @@
-# Lab 1 - Build the Lab
+# Build the Lab
 
 Sovereign Ai requires know the chain of custody for your entire supply chain
 **“from Dirt to Data”** begining where your **root of trust** begins. 
@@ -18,30 +18,33 @@ Our **root of trust** begins with our hardware choices for the Lab. In a highly 
 
 Since this is a student lab, your lab server hardware simply needs to meet following minimum specifications:
 
-| **Component**         | Detail                         |        |
-|-----------------------|--------------------------------|
-| **Processor**         | Intel Core i7 series           |
-| **Memory**            | 64GB RAM DDR4                  |
-| **GPU**               | NVIDIA RTX 3050 GPU (6GB VRAM) |
-|                       |     or AMD RX 7600 (8GB VRAM)  |
-| **Hard Drive**        | 1 TB SSD                       |
-| **Network Interface** | 1GB                            |
+| Component         | Detail                         | 
+|-------------------|--------------------------------|
+| Processor         | Intel Core i7 series           |
+| Memory            | 64GB RAM DDR4                  |
+| GPU               | NVIDIA RTX 3050 GPU (6GB VRAM) |
+|                   |     or AMD RX 7600 (8GB VRAM)  |
+| Hard Drive        | 1 TB SSD                       |
+| Network Interface | 1GB                            |
 
+## Software
+The layers of software to be installed in order include:
 
-# Software
-On top of the hardware, we will be installing layers of software that comprise the AI stack: This will include:
+|        **Layer**       |             Example               |
+|------------------------|-----------------------------------|
+| Operating System (OS)  | Ubuntu 24.04 Desktop              |
+| OS Utilities           | build-essential btop nvtop curl   |
+| GPU Drivers            | NVIDIA or AMD                     |
+| GPU Utilities          | nvidia-smi or roc-smi             |
+| Python Environment     | python3 and its libraries         |
+| Inference/Model Server | [Ollama](https://ollama.com/)                |
+| Model Layer (LLM)      | [IBM Granite4:3b](https://ollama.com/library/granite4:3b)      |
 
-| **Layer**          | Detail                |
-|--------------------|-----------------------|
-| Operating System   | Ubuntu 24.04 Desktop  |
-| GPU drivers        | NVIDIA or AMD         |
-| GPU utilities      | NVIDIA or AMD         |
-| Runtime            | Python and Libraries  |
-| LLM Orchestration  | [Ollama](https://ollama.com/                |
-| LLM Model          | [IBM Granite4:3b](https://ollama.com/library/granite4:3b)      |
+With the exception of the OS and OS utilities, the remaining software can be installed using
+a provided script referenced in the next section though much can be learned
+if you are a "show me" kind of person choosing the manual installation route
 
-# Installing the Operating System (Ubuntu 24.04 Desktop)
-
+### Install the Operating System
 - **Create the Ubuntu 24.04 Desktop LTS install media.** Create either as a DVD (if your server has a DVD) or a bootable USB.
 -- Supply Chain Note: Best to download the media from the [official Ubuntu site](https://ubuntu.com/download/desktop)
 - **Start the server** and boot from media.
@@ -50,35 +53,78 @@ On top of the hardware, we will be installing layers of software that comprise t
 - **Help Improve Ubuntu:** Select **"No, don’t share system data"** since we want to isolate this server.
 - Reboot server
 
-### Step 2: Drivers (NVIDIA)
-
-Once Ubuntu is installed and you are logged in, open a **Terminal** (Ctrl+Alt+T) and perform the following:
-
-1.  **Update Repositories, Install Drivers, and Build Utilities:**
+## Operating System Utilities
+Log into the server to beging installing the OS utilities
 
 ```
 sudo apt update && sudo apt upgrade -y
 sudo ubuntu-drivers autoinstall
-sudo apt install nvidia-utils-565-server nvtop btop -y
-sudo apt install build-essential git gcc cmake curl -y
+sudo apt install build-essential git gcc cmake curl nvtop btop -y
 ```
 
-2.  **Install Python Environment and Development Utilities:**
+To make use of lab scripts, clone the Sovereign AI Lab repo into your home directory on the server
 
 ```
-sudo apt install python3-pip python3-venv python3-dev -y
+git clone https://github.com/joecupano/sovereign-ai-lab
+```
+
+## GPU Utilities Installation
+Next step is to install utilities specific to your GPU:
+
+For NVIDIA
+```
+sudo apt install nvidia-utils-565-server -y
 sudo reboot
 ```
 
-3.  **Verify the GPU Hardware:** After reboot then run:
+For AMD it is a little more involved
+```
+sudo apt update
+sudo apt install wget gpg -y
+wget -qO - https://repo.radeon.com/rocm/rocm.gpg.key
+sudo gpg --dearmor -o /etc/apt/keyrings/rocm.gpg
+echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/6.0/ jammy main"
+sudo tee /etc/apt/sources.list.d/rocm.list
+sudo apt update
+sudo apt install fglrx-core rocm-hip-sdk -y
+sudo usermod -aG video \$USER
+sudo usermod -aG render \$USER
+sudo reboot
+```
+### Verify the GPU Hardware after reboot then run:
 
+For NVIDIA
 ```
 nvidia-smi
 ```
 
-You should see a table displaying your GPU and its VRAM.
+For AMD
+```
+roc-smi
+```
+
+You should see a table similar to the following displaying your GPU and its VRAM.
 
 ![nvidia-smi output](https://raw.githubusercontent.com/wiki/joecupano/sovereign-ai-course/pix/Lab1_nvidiasmi-3050.png "nvidia-smi output")
+
+## Python Environment and Utilities:**
+Next step is to install Python environment and its utilities:
+
+```
+sudo apt install python3-pip python3-venv python3-dev -y
+```
+## Software
+On top of the operating system we install the layers of software that comprise the AI stack: 
+
+The stack will include:
+
+| **Layer**             | Detail                |
+|-----------------------|-----------------------|
+| GPU utilities         | NVIDIA or AMD         |
+| Runtime               | Python and Libraries  |
+| LLM Orchestration     | [Ollama](https://ollama.com/)                |
+| LLM Model             | [IBM Granite4:3b](https://ollama.com/library/granite4:3b)      |
+
 
 ### Step 3: Engine (Ollama)
 

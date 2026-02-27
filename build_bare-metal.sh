@@ -113,8 +113,8 @@ environment performing the following in order:
 
 1. Update Repositories
 2. Detect GPU and Install Drivers (if missing)
-3. Install GPU Utilities
-4. Install Build Utilities
+3. Install OS Utilities
+4. Install GPU Utilities
 5. Install Python Environment and Development Utilities
 6. Install Ollama
 7. Pull an LLM (IBM Granite4:3b)
@@ -134,6 +134,7 @@ echo -e "${INSTALL_COLOR}"
 echo -e "${BANNER_RESET}"
 echo " "
 sudo apt update && sudo apt upgrade -y
+
 echo " "
 echo -e "${INSTALL_COLOR}"
 echo -e "${INSTALL_COLOR} 2. Detect GPU and Install Drivers (if missing)"
@@ -142,9 +143,18 @@ echo -e "${BANNER_RESET}"
 echo " "
 install_gpu_drivers_if_missing
 gpu_vendor=$(detect_gpu_vendor)
+
 echo " "
 echo -e "${INSTALL_COLOR}"
-echo -e "${INSTALL_COLOR} 3. Install GPU Utilities"
+echo -e "${INSTALL_COLOR} 4. Install Build Utilities"
+echo -e "${INSTALL_COLOR}"
+echo -e "${BANNER_RESET}"
+echo " "
+install_apt_packages build-essential git gcc cmake curl
+
+echo " "
+echo -e "${INSTALL_COLOR}"
+echo -e "${INSTALL_COLOR} 5. Install GPU Utilities"
 echo -e "${INSTALL_COLOR}"
 echo -e "${BANNER_RESET}"
 echo " "
@@ -155,13 +165,6 @@ if [ "$gpu_vendor" = "nvidia" ]; then
 else
 	install_apt_packages nvtop btop
 fi
-echo " "
-echo -e "${INSTALL_COLOR}"
-echo -e "${INSTALL_COLOR} 4. Install Build Utilities"
-echo -e "${INSTALL_COLOR}"
-echo -e "${BANNER_RESET}"
-echo " "
-install_apt_packages build-essential git gcc cmake curl
 
 echo " "
 echo -e "${INSTALL_COLOR}"
