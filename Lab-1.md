@@ -18,8 +18,9 @@ Our **root of trust** begins with our hardware choices for the Lab. In a highly 
 
 Since this is a student lab, your lab server hardware simply needs to meet following minimum specifications:
 
-| **Processor**         | Intel Core i7 series           |
+| **Component**         | Detail                         |        |
 |-----------------------|--------------------------------|
+| **Processor**         | Intel Core i7 series           |
 | **Memory**            | 64GB RAM DDR4                  |
 | **GPU**               | NVIDIA RTX 3050 GPU (6GB VRAM) |
 |                       |     or AMD RX 7600 (8GB VRAM)  |
@@ -30,6 +31,8 @@ Since this is a student lab, your lab server hardware simply needs to meet follo
 # Software
 On top of the hardware, we will be installing layers of software that comprise the AI stack: This will include:
 
+| **Layer**          | Detail                |
+|--------------------|-----------------------|
 | Operating System   | Ubuntu 24.04 Desktop  |
 | GPU drivers        | NVIDIA or AMD         |
 | GPU utilities      | NVIDIA or AMD         |
