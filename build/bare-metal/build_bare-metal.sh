@@ -117,7 +117,7 @@ environment performing the following in order:
 4. Install Build Utilities
 5. Install Python Environment and Development Utilities
 6. Install Ollama
-7. Pull an LLM (IBM Granite 3.3 8B)
+7. Pull an LLM (IBM Granite4:3b)
 
 Starting ...
 
@@ -183,11 +183,11 @@ curl -fsSL https://ollama.com/install.sh | sh
 
 echo " "
 echo -e "${INSTALL_COLOR}"
-echo -e "${INSTALL_COLOR} 7. Pull an LLM (IBM Granite 3.3 8B)"
+echo -e "${INSTALL_COLOR} 7. Pull an LLM (IBM Granite4:3b)"
 echo -e "${INSTALL_COLOR}"
 echo -e "${BANNER_RESET}"   
 echo " "
-ollama pull granite3.3:8b
+ollama pull granite4:3b
 
 echo " "
 echo -e "${SUCCESS_COLOR}                                                        "
@@ -197,7 +197,7 @@ cat <<'EOF'
 With everything installed, you can now run the LLM using
 the following command to enter a chat prompt session with the model:
 
-ollama run granite3.3:8b
+ollama run granite4:3b
 
 Enjoy !
 

@@ -19,7 +19,7 @@ This lab introduces **RAG (Retrieval-Augmented Generation)**. Students will lear
 
 First, we must prove why RAG is necessary. We will ask the model about a document it has never seen.
 
-1. **Open Terminal** and run: **ollama run granite3.3:8b**
+1. **Open Terminal** and run: **ollama run granite4:3b**
 2. **Ask the Model:** *"What are the procedures to shutdown the M6 Multitronic Computer?"*
 3. **Observe:** The model will either say it doesn't know or, more likely, "hallucinate" a generic answer.
 4. **Exit:** Type **/exit**
@@ -48,7 +48,7 @@ We will now "feed" this file into the model's short-term memory (Context Window)
 1.  **The Command:**
 
 ```
-cat m6_rules.txt \| ollama run granite3.3:8b "Using only the provided text, How do I shutdown the M6 Multitronic computer?"
+cat m6_rules.txt \| ollama run granite4:3b "Using only the provided text, How do I shutdown the M6 Multitronic computer?"
 ```
 
 The model should have a much better response.

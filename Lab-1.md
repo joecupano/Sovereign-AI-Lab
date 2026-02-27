@@ -102,7 +102,7 @@ With Ollama already running as a system service, we next pull and run a model.
 1.  **Pull the Model:**
 
 ```
-ollama pull granite3.3:8b
+ollama pull granite4:3b
 ```
 
 ![Ollama pull](https://raw.githubusercontent.com/wiki/joecupano/sovereign-ai-course/pix/Lab1_Ollama-Pull.png "Ollama pull")
@@ -110,7 +110,7 @@ ollama pull granite3.3:8b
 2.  **Run the Model:**
 
 ```
-ollama run granite3.3:8b
+ollama run granite4:3b
 ```
 
 ![Ollama run](https://raw.githubusercontent.com/wiki/joecupano/sovereign-ai-course/pix/Lab1_Ollama-Run.png "Ollama run")

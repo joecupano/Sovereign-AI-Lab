@@ -38,7 +38,7 @@ On your Ubuntu workstations, open the terminal and use the following commands to
 | **OLMo 3 (7B Instruct)**  | ollama pull olmo-3:7b-instruct | ollama run olmo-3:7b-instruct       |
 | **OLMo 3 (7B Think)**     | ollama pull olmo-3:7b-think    | ollama run olmo-3:7b-think          |
 | **Granite 3.0 (General)** | ollama pull granite3-dense:8b  | ollama run granite3-dense:8b        |
-| **Granite 3.3 (Latest)**  | ollama pull granite3.3:8b      | ollama run granite3.3:8b            |
+| **Granite 3.3 (Latest)**  | ollama pull granite4:3b      | ollama run granite4:3b            |
 
 ### Managing the Models
 

@@ -42,7 +42,7 @@ journalctl -u ollama -f
 In the **Command Terminal**, run the Granite model with the **--verbose flag**. This flag is critical because it tells Ollama to print precise timing data after every response.
 
 ```
-ollama run granite3.3:8b –verbose
+ollama run granite4:3b –verbose
 ```
 
 In the chat prompt enter a query such as *"Write a 100-word essay on why Open Science is important for AI safety."* Once the model finishes, look at the bottom of the response. Record the following:
@@ -70,7 +70,7 @@ Leave this terminal window running; it is now your temporary manual server.
 Open a **new terminal** which will refer to as the **Test Terminal** and run the following:
 
 ```
-ollama run granite3.3:8b --verbose
+ollama run granite4:3b --verbose
 ```
 
 Use the exact same chat prompt entry as before and record the new metrics.
