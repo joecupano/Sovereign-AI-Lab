@@ -1,38 +1,51 @@
-# Lab 1
+# Lab 1 - Build the Lab
 
-## Lecture: “From Dirt to Data”
+Sovereign Ai requires know the chain of custody for your entire supply chain
+**“from Dirt to Data”** begining where your **root of trust** begins. 
 
-### Useful Background
-*Where does AI physically come from? The physical origin of AI and the global semiconductor supply chain.*
+## Hardware
+At the hardware level, full sovereignty is currently impossible. The AI semiconductor supply chain is globally concentrated and dominated by a small number of chokepoints: U.S.‑controlled chip design tools and architectures, ASML lithography equipment, Taiwanese fabrication (TSMC), and NVIDIA GPUs and software. No country can fully control this stack today. Sovereign AI strategies **must acknowledge and document these dependencies as accepted risks** rather than pretend they can be eliminated.
 
-- **The Periodic Table of AI:** Mining for minerals like Lithium, Cobalt, and Rare Earth elements needed for chips. Trace the minerals (Lithium, Cobalt, Silicon) from mines in the DRC and Chile to the "clean rooms" of Taiwan.
-- **GPU vs CPU:** Understanding Semiconductors. Why is NVIDIA a household name? Why the **NVIDIA RTX 3050** is a "parallel processing beast" compared to a standard processor. Explain **CUDA cores** and **Tensor cores**.
-- **The Global Factory and Geopolitics of Silicon:** The geography of the supply chain—from design in the US to manufacturing in Taiwan (TSMC) and assembly globally. Discuss why 90% of advanced chips come from one company (TSMC).
-- **Activity:** Students map the journey of a single AI chip from a cobalt mine to a data center.
+Where sovereignty becomes practical and defensible is **above the silicon layer.** Chain‑of‑custody across systems, logistics, data centers, networks, cloud environments, and software stacks is the primary control mechanism. This includes rigorous vendor qualification, bill‑of‑materials verification, tamper‑evident shipping, hardware and firmware attestation, controlled data‑center access, segmented and auditable networks, sovereign key management, and strict identity and access controls. 
 
-## Lab: Build the Lab
+Our **root of trust** begins with our hardware choices for the Lab. In a highly regulated environment systems, **not hardware** are accredited as compliant. The system used in the production of these labs is similar to one that can be accredited.
 
-Your lab server hardware requires the following minimum specifications
+- Dell Precision 3620 with 64GB RAM
+- 4TB PCIe Gen3 3D NAND NVMe M.2 SSD (Upgrade)
+- 850W Power Supply, 80+ Gold Certified (Upgrade)
+- 130W TDP CPU Cooler (Upgrade)
+- NVIDIA RTX 3050 GPU
+
+Since this is a student lab, your lab server hardware simply needs to meet following minimum specifications:
 
 | **Processor**         | Intel Core i7 series           |
 |-----------------------|--------------------------------|
 | **Memory**            | 64GB RAM DDR4                  |
 | **GPU**               | NVIDIA RTX 3050 GPU (6GB VRAM) |
+|                       |     or AMD RX 7600 (8GB VRAM)  |
 | **Hard Drive**        | 1 TB SSD                       |
 | **Network Interface** | 1GB                            |
 
-Given hardware, four layers that comprise the AI stack will be installed: OS, Driver, Engine, and Model.
 
-### Step 1: OS Layer (Ubuntu 24.04)
+# Software
+On top of the hardware, we will be installing layers of software that comprise the AI stack: This will include:
 
-1.  **Create the Ubuntu 24.04 Desktop LTS install media.** Create either as a DVD (if your server has a DVD) or a bootable USB.
+| Operating System   | Ubuntu 24.04 Desktop  |
+| GPU drivers        | NVIDIA or AMD         |
+| GPU utilities      | NVIDIA or AMD         |
+| Runtime            | Python and Libraries  |
+| LLM Orchestration  | [Ollama](https://ollama.com/                |
+| LLM Model          | [IBM Granite4:3b](https://ollama.com/library/granite4:3b)      |
 
-    *Supply Chain Note: Best to download the media from the official Ubuntu site.*
+# Installing the Operating System (Ubuntu 24.04 Desktop)
 
-2.  **Start the server** and boot from media.
-3.  **Installation Type:** Select **"Erase disk and install Ubuntu."** As a matter of Supply Chain "wiping the disk" is the first step in ensuring data provenance and a clean environment.
-4.  **Third-Party Software:** Ensure the box **"Install third-party software for graphics and Wi-Fi"** is checked. This helps Ubuntu detect the NVIDIA GPUs.
-5.  **Help Improve Ubuntu:** Select **"No, don’t share system data"** since we want t isolate this server from externa influence.
+- **Create the Ubuntu 24.04 Desktop LTS install media.** Create either as a DVD (if your server has a DVD) or a bootable USB.
+-- Supply Chain Note: Best to download the media from the [official Ubuntu site](https://ubuntu.com/download/desktop)
+- **Start the server** and boot from media.
+- **Installation Type:** Select **"Erase disk and install Ubuntu."**
+- **Third-Party Software:** Ensure the box **"Install third-party software for graphics and Wi-Fi"** is checked. This helps Ubuntu detect the NVIDIA GPUs.
+- **Help Improve Ubuntu:** Select **"No, don’t share system data"** since we want to isolate this server.
+- Reboot server
 
 ### Step 2: Drivers (NVIDIA)
 
