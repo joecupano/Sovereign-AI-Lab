@@ -40,10 +40,6 @@ The layers of software to be installed in order include:
 | Inference/Model Server | [Ollama](https://ollama.com/)                |
 | Model Layer (LLM)      | [IBM Granite4:3b](https://ollama.com/library/granite4:3b)      |
 
-With the exception of the OS and OS utilities, the remaining software can be installed using
-a provided script referenced in the next section though much can be learned
-if you are a "show me" kind of person choosing the manual installation route
-
 ### Install the Operating System
 - **Create the Ubuntu 24.04 Desktop LTS install media.** Create either as a DVD (if your server has a DVD) or a bootable USB.
 -- Supply Chain Note: Best to download the media from the [official Ubuntu site](https://ubuntu.com/download/desktop)
@@ -54,7 +50,7 @@ if you are a "show me" kind of person choosing the manual installation route
 - Reboot server
 
 ## Operating System Utilities
-Log into the server to beging installing the OS utilities
+Log into the server to install OS utilities we will need
 
 ```
 sudo apt update && sudo apt upgrade -y
@@ -63,20 +59,28 @@ sudo apt install build-essential git gcc cmake curl nvtop btop -y
 ```
 
 ## Install Software Stack (Automated)
-To make use of the install script you need to perform the following from the home directory on the server 
+Next we will install the sofware stack for our AI platform
 
 ```
+cd ~
 git clone https://github.com/joecupano/sovereign-ai-lab
 cd sovereign-ai-lab
+```
+You have two choices that this point, automated or manual installation of the
+remainng software. If you wish automated, execute the following script.
+
+```
 ./build_bare-metal.sh
 ```
-The remaining software layers will be installed
+
+If you wish to do a manual installation skip running the scripts and go
+to the next section. Otherwise jump to the **Your first Chat session** section
 
 ## Install Software Stack (Manual) 
-Good for you in being adventurous.
+Trust but verify. Good for you in being adventurous.
 
-### GPU Utilities Installation
-Next step is to install utilities specific to your GPU:
+### Install GPU Drivers and Utilities
+Next step is to install software specific to your GPU:
 
 For NVIDIA
 ```
@@ -114,14 +118,14 @@ You should see a table similar to the following displaying your GPU and its VRAM
 
 ![nvidia-smi output](https://raw.githubusercontent.com/wiki/joecupano/sovereign-ai-course/pix/Lab1_nvidiasmi-3050.png "nvidia-smi output")
 
-### Python Environment and Utilities
-Next step is to install Python environment and its utilities:
+### Install Python Environment
+Next step is to install the Python environment:
 
 ```
 sudo apt install python3-pip python3-venv python3-dev -y
 ```
 
-### Inference/Model Server (Ollama)
+### Install Inference/Model Server (Ollama)
 
 Next, we install the Ollama engine. It will run as a system service and by default automatically detect your GPU and use it.
 
@@ -141,7 +145,7 @@ systemctl status ollama
 
 It should say **"active (running).**
 
-### LLM Model (IBM Granite)
+### Install LLM Model (IBM Granite)
 Next, we download our first LLM. Given our focus on supply chain we will use **IBM Granite**.
 
 IBM provides a "clear box" approach by disclosing its **full data provenance**. It recently earned a **95% score** on Stanford’s Foundation Model Transparency Index (FMTI) which is the highest ever recorded. Unlike **"black box"** models, IBM reveals the exact filtering, cleansing, and curation steps used to vet its 12+ trillion tokens for governance, risk, and bias.
@@ -150,13 +154,23 @@ Because IBM has such detailed documentation of its "Data Supply Chain," it offer
 
 We will be using Granite 3.0 8B Instruct**.** This "workhorse" model is optimized for the lab hardware specifications. It excels at structured tasks like RAG (Retrieval-Augmented Generation) and tool-calling, making it ideal to build reliable local AI applications.
 
-With Ollama already running as a system service, we pull and run the IBM Granite 4 model.
+With Ollama already running as a system service, we pull the IBM Granite 4 model.
 
 ```
 ollama pull granite4:3b
 ```
 
 ![Ollama pull](https://raw.githubusercontent.com/wiki/joecupano/sovereign-ai-course/pix/Lab1_Ollama-Pull.png "Ollama pull")
+
+Let;s go ahead and reboot
+
+```
+sudo reboot
+```
+
+## Your first Chat session
+After reboot and with Ollama already running as a system service you can run your
+first chat session.:
 
 ```
 ollama run granite4:3b
@@ -173,3 +187,5 @@ And/or perform **/?** For a list of commands.
 ![Ollama help](https://raw.githubusercontent.com/wiki/joecupano/sovereign-ai-course/pix/Lab1_Ollama-Help.png "Ollama help")
 
 We will exit the session with the command **/bye**
+
+You are ready for the next lab.
