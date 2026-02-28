@@ -53,6 +53,15 @@ journalctl -u ollama -f
 
 ![MONITOR, LOG, COMMAND Terminals](/pix/Lab2_ThreeTerms.png "MONITOR, LOG, COMMAND Terminals")
 
+### Data Gathering
+A table to document the data we will be gathering:
+
+| **Metric**                  | **GPU Test** | **CPU Test** | **% Difference** |
+|-----------------------------|--------------|--------------|------------------|
+| **Tokens per Second**       |              |              |                  |
+| **Total Response Time**     |              |              |                  |
+| **"Feel" (Lag/Smoothness)** |              |              |                  |
+
 ### GPU Baseline (Standard Mode)
 
 In the **Command Terminal**, run the Granite model with the **--verbose flag**. This flag is critical because it tells Ollama to print precise timing data after every response.
@@ -101,29 +110,14 @@ Your **Monitoring Terminal** may show activity similar to this during the run:
 
 GPU use seen is by the desktop environment.
 
-### Lab Analysis & Report
-
-Complete the following comparison table:
-
-| **Metric**                  | **GPU Test** | **CPU Test** | **% Difference** |
-|-----------------------------|--------------|--------------|------------------|
-| **Tokens per Second**       |              |              |                  |
-| **Total Response Time**     |              |              |                  |
-| **"Feel" (Lag/Smoothness)** |              |              |                  |
-
-Students submit a report answering these three data-driven questions:
-
+### Findings
+Fomr the data gathered, ask yourself these questios
 **1. Performance Multiplier**
-- *Question:* Is the GPU faster and by how much. Explain why this makes "Real-Time AI" impossible on standard office computers.
+- Is the GPU faster and by how much. Explain why this makes "Real-Time AI" impossible on standard office computers.
 
 **2. VRAM vs. RAM**
-- *Question* When the GPU was disabled, what did the logs say about "offloading layers"?
-- *Question* Why does the CPU take so much longer to "read" the model from RAM compared to VRAM?
+- When the GPU was disabled, what did the logs say about "offloading layers"?
+- Why does the CPU take so much longer to "read" the model from RAM compared to VRAM?
 
 **3. Energy/Heat Observation.**
-- *Question:* When viewing the **moinitoring terminal** Which hardware component got hotter during its respective test? What does this tell us about the "Work" being performed?
-
-## Optional Lab
-- **Quantization Exploration**. Compare performance of the same model in different "weights" between **llama3.1:8b** (high quality, slow) and **llama3.1:8b-instruct-q4_0** (lower quality, fast).
-- **Monitoring Thermal Loads**. Run **nvtop** to watch the clock speeds and temperature of the RTX 3050 graphically while running a heavy batch of prompts using **nvtop**. Students must identify the "Temperature" and "Fan Speed" spikes during heavy inference.
-- **Multi-Model Concurrency**. Try to run two models simultaneously (e.g., Mistral and Llama 3) to see at what point the 6GB VRAM "OOMs" (Out of Memory).
+- When viewing the **moinitoring terminal** which hardware component got hotter during its respective test? What does this tell us about the "Work" being performed?

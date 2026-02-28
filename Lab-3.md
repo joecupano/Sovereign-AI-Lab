@@ -11,6 +11,13 @@
 - **The User Interface:** Designing the chat box or app that humans actually interact with.
 - **Activity:** "Build the Stack" A paper exercise where students assemble a hypothetical AI app, identifying each layer from hardware to UI.
 
+
+## Optional Lab
+- **Quantization Exploration**. Compare performance of the same model in different "weights" between **llama3.1:8b** (high quality, slow) and **llama3.1:8b-instruct-q4_0** (lower quality, fast).
+- **Monitoring Thermal Loads**. Run **nvtop** to watch the clock speeds and temperature of the GPU graphically while running a heavy batch of prompts using **nvtop**. Students must identify the "Temperature" and "Fan Speed" spikes during heavy inference.
+- **Multi-Model Concurrency**. Try to run two models simultaneously (e.g., Mistral and Llama 3) to see at what point the VRAM run out of memory.
+
+
 ## Lab: Domain-centric AI
 
 This lab introduces **RAG (Retrieval-Augmented Generation)**. Students will learn that an AI is only as good as the data it can access by bridging the gap between a "Pre-trained" model and "Private Data" by using a local document-feeding technique. They will give their local **IBM Granite** model "temporary sight" by feeding the model specific local documents to analyze, **ensuring no data ever leaves the LAB server.**
