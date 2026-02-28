@@ -26,21 +26,23 @@ All software choices are open source. The **IBM Granite 4.3** LLM was chosen bas
 - [CPU Stress Test (Forced Mode)](Lab-2.md#cpu-stress-test-forced-mode)
 - [Lab Analysis & Report](Lab-2.md#lab-analysis-report)
 
-**[AI Software Stack](Lab-3.md)**
-- [Hallucination Test](Lab-3.md#hallucination-test)
-- [Creating the Local "Knowledge Base"](Lab-3.md#creating-local-knowledge-base)
-- [Context Injection (Manual RAG)](Lab-3.md#context-injection-manual-rag)
-- [Monitoring the "Context Tax"](Lab-3.md#monitoring-the-context-tax)
-- [Lab Report — Data Sovereign Audit](Lab-3.md#lab-report-data-sovereign-audit)
-- [Key Concept: "Short-Term Memory"](Lab-3.md#key-concept-short-term-memory)
 
-**[Ethics Audit](Lab-4.md)**
-- [Understanding the "System Prompt"](Lab-4.md#understanding-the-system-prompt)
-- [The Ethics "Guardrail" Challenge](Lab-4.md#the-ethics-guardrail-challenge)
-- [The "Bias Audit" (Open Science Investigation)](Lab-4.md#the-bias-audit-open-science-investigation)
-- [Hardening the AI (The "Sovereign" Guardrail)](Lab-4.md#hardening-the-ai-the-sovereign-guardrail)
-- [Final Course Reflection — The "Capstone" Report](Lab-4.md#final-course-reflection-the-capstone-report)
-- [Lab: Sustainability Audit](Lab-4.md#lab-sustainability-audit)
+
+**[AI Software Stack](Lab-4.md)**
+- [Hallucination Test](Lab-4.md#hallucination-test)
+- [Creating the Local "Knowledge Base"](Lab-4.md#creating-local-knowledge-base)
+- [Context Injection (Manual RAG)](Lab-4.md#context-injection-manual-rag)
+- [Monitoring the "Context Tax"](Lab-4.md#monitoring-the-context-tax)
+- [Lab Report — Data Sovereign Audit](Lab-4.md#lab-report-data-sovereign-audit)
+- [Key Concept: "Short-Term Memory"](Lab-4.md#key-concept-short-term-memory)
+
+**[Ethics Audit](Lab-5.md)**
+- [Understanding the "System Prompt"](Lab-5.md#understanding-the-system-prompt)
+- [The Ethics "Guardrail" Challenge](Lab-5.md#the-ethics-guardrail-challenge)
+- [The "Bias Audit" (Open Science Investigation)](Lab-5.md#the-bias-audit-open-science-investigation)
+- [Hardening the AI (The "Sovereign" Guardrail)](Lab-5.md#hardening-the-ai-the-sovereign-guardrail)
+- [Final Course Reflection — The "Capstone" Report](Lab-5.md#final-course-reflection-the-capstone-report)
+- [Lab: Sustainability Audit](Lab-5.md#lab-sustainability-audit)
 
 **[Final Project](Final-Project.md)**
 

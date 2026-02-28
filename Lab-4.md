@@ -1,32 +1,19 @@
-# Lab 4
+# Domain-centric AI with Local RAG
 
-## Lecture: The AI Software Stack
+This lab introduces **RAG (Retrieval-Augmented Generation)**. AI is only as good as the data it can access. By bridging the gap between a "Pre-trained" model and "Private Data" by using a local document-feeding technique we will give our local LLM model "temporary sight" by feeding the model specific local documents to analyze, **ensuring no data ever leaves the LAB server.**
 
-### Useful Background
-*Focus: Moving from "Chatting" to "Building." How is the "brain" built? Programming with local models.*
-
-- **Data:** The Fuel of AI. Where does training data come from? Discussion on web-scraping, licensing, and human data labeling. How RAG (Retrieval Augmented Generation) gives an AI a "textbook" so it stops hallucinating.
-- **Models & Algorithms:** High-level overview of Large Language Models (LLMs) and Diffusion models (images).
-- **The Middleware:** Understanding APIs (Application Programming Interfaces). How does an app "talk" to a model? Explain that AI is just a function that takes a string and returns a string.
-- **The User Interface:** Designing the chat box or app that humans actually interact with.
-- **Activity:** "Build the Stack" A paper exercise where students assemble a hypothetical AI app, identifying each layer from hardware to UI.
-
-## Lab: Domain-centric AI
-
-This lab introduces **RAG (Retrieval-Augmented Generation)**. Students will learn that an AI is only as good as the data it can access by bridging the gap between a "Pre-trained" model and "Private Data" by using a local document-feeding technique. They will give their local **IBM Granite** model "temporary sight" by feeding the model specific local documents to analyze, **ensuring no data ever leaves the LAB server.**
-
-### Step 1: Hallucination Test
+### Hallucination Test
 
 First, we must prove why RAG is necessary. We will ask the model about a document it has never seen.
 
-1. **Open Terminal** and run: **ollama run granite4:3b**
+1. Open a **Terminal**, run **ollama pull granite4:3b** and then **ollama run granite4:3b**
 2. **Ask the Model:** *"What are the procedures to shutdown the M6 Multitronic Computer?"*
 3. **Observe:** The model will either say it doesn't know or, more likely, "hallucinate" a generic answer.
 4. **Exit:** Type **/exit**
 
-![Hallucination](/pix/Lab3_Hallucinating.png "Hallucination")
+![Hallucination](/pix/Lab4_Hallucinating.png "Hallucination")
 
-### Step 2: Creating Local Knowledge Base
+### Creating Local Knowledge Base
 
 Now create a "Private" data file that contains information the model couldn't possibly know.
 
@@ -53,19 +40,18 @@ cat m6_rules.txt \| ollama run granite4:3b "Using only the provided text, How do
 
 The model should have a much better response.
 
-![Useful responser](/pix/Lab3_Correct-Response.png "Useful Response")
+![Useful responser](/pix/Lab4_Correct-Response.png "Useful Response")
 
-
-### Step 4: Monitoring the "Context Tax"
+### Monitoring the "Context Tax"
 
 Adding data to a prompt costs and consumes hardware resources.
 
 1. **Open nvtop** in a side window.
-2. **Run a "Long RAG" test:** Copy and paste a large Wikipedia article into a text file and pipe it to Granite.
+2. **Run a "Long RAG" test** Copy and paste a large Wikipedia article into a text file and pipe it to the LLM.
 3. **Audit Task:** Observe the **VRAM** usage in **nvtop**
     - As the "Context Window" (the amount of text you feed the AI) grows, the GPU has to work harder to "remember" the beginning of the text while reading the end.
 
-### Step 5: Lab Report — Data Sovereign Audit
+### Lab Report — Data Sovereign Audit
 
 Answer the following:
 
