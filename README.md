@@ -39,7 +39,7 @@ All software choices are open source. The **IBM Granite 4.3** LLM was chosen bas
 - [Findings](Lab-4.md#findings)
 
 **[Power Consumption](Lab-5.md)**
-- [Physical Setup"](Lab-5.md#physical-setup)
+- [Physical Setup](Lab-5.md#physical-setup)
 - [GPU Mode Consumption](Lab-5.md#gpu-mode-consumption)
 - [CPU Mode Consumption](Lab-5.md#cpu-mode-consumption)
 - [Summary](Lab-5.md#summary)
