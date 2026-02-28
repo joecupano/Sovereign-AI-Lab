@@ -1,17 +1,26 @@
 # Domain-centric AI with Local RAG
-
-This lab introduces **RAG (Retrieval-Augmented Generation)**. AI is only as good as the data it can access. By bridging the gap between a "Pre-trained" model and "Private Data" by using a local document-feeding technique we will give our local LLM model "temporary sight" by feeding the model specific local documents to analyze, **ensuring no data ever leaves the LAB server.**
+This lab introduces **Retrieval-Augmented Generation (RAG)**, a method that helps an AI answer questions using your own local documents. In this lab you will see how a pre-trained model can be grounded with private data at runtime, so responses are more accurate and less likely to hallucinate. By the end, you’ll understand how to give your local LLM Granite model temporary context from files stored on the lab server—without sending sensitive information outside your environment.
 
 ## Hallucination Test
+To prove why RAG is necessary we will ask the model about a document it has never seen. Open a **Terminal** and run the following:
 
-First, we must prove why RAG is necessary. We will ask the model about a document it has never seen.
+```
+ollama pull granite4:3b
+ollama run granite4:3b
+```
+Now ask the model the following question:
 
-1. Open a **Terminal**, run **ollama pull granite4:3b** and then **ollama run granite4:3b**
-2. **Ask the Model:** *"What are the procedures to shutdown the M6 Multitronic Computer?"*
-3. **Observe:** The model will either say it doesn't know or, more likely, "hallucinate" a generic answer.
-4. **Exit:** Type **/exit**
+*"What are the procedures to shutdown the M6 Multitronic Computer?"*
+
+OThe model will either say it doesn't know or, more likely, "hallucinate" a generic answer.
 
 ![Hallucination](/pix/Lab4_Hallucinating.png "Hallucination")
+
+Exit the chat session
+
+```
+/bye
+```
 
 ## Creating Local Knowledge
 
