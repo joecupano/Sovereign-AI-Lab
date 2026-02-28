@@ -24,7 +24,7 @@ First, we must prove why RAG is necessary. We will ask the model about a documen
 3. **Observe:** The model will either say it doesn't know or, more likely, "hallucinate" a generic answer.
 4. **Exit:** Type **/exit**
 
-![Hallucination](https://raw.githubusercontent.com/wiki/joecupano/sovereign-ai-course/pix/Lab3_Hallucinating.png "Hallucination")
+![Hallucination](/pix/Lab3_Hallucinating.png "Hallucination")
 
 ### Step 2: Creating Local Knowledge Base
 
@@ -53,7 +53,7 @@ cat m6_rules.txt \| ollama run granite4:3b "Using only the provided text, How do
 
 The model should have a much better response.
 
-![Useful responser](https://raw.githubusercontent.com/wiki/joecupano/sovereign-ai-course/pix/Lab3_Correct-Response.png "Useful Response")
+![Useful responser](/pix/Lab3_Correct-Response.png "Useful Response")
 
 
 ### Step 4: Monitoring the "Context Tax"

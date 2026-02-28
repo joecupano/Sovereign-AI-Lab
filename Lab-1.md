@@ -1,6 +1,6 @@
 # Build the Lab
 
-Sovereign Ai requires know the chain of custody for your entire supply chain
+Sovereign Ai requires knowing the chain of custody for your entire supply chain
 **“from Dirt to Data”** begining where your **root of trust** begins. 
 
 ## Hardware
@@ -49,7 +49,7 @@ The layers of software to be installed in order include:
 - **Help Improve Ubuntu:** Select **"No, don’t share system data"** since we want to isolate this server.
 - Reboot server
 
-## Operating System Utilities
+## Install Operating System Utilities
 Log into the server to install OS utilities we will need
 
 ```
