@@ -21,25 +21,25 @@ All software choices are open source. The **IBM Granite 4.3** LLM was chosen bas
 - [Your first Chat session](Lab-1.md#your-first-chat-session)
 
 **[CPU vs GPU](Lab-2.md)**
-- [Step 1: Setup](Lab-2.md#step-1-setup)
-- [Step 2: GPU Baseline (Standard Mode)](Lab-2.md#step-2-gpu-baseline-standard-mode)
-- [Step 3: CPU Stress Test (Forced Mode)](Lab-2.md#step-3-cpu-stress-test-forced-mode)
-- [Step 4: Lab Analysis & Report](Lab-2.md#step-4-lab-analysis-report)
+- [Setup](Lab-2.md#step-1-setup)
+- [GPU Baseline (Standard Mode)](Lab-2.md#gpu-baseline-standard-mode)
+- [CPU Stress Test (Forced Mode)](Lab-2.md#cpu-stress-test-forced-mode)
+- [Lab Analysis & Report](Lab-2.md#lab-analysis-report)
 
 **[AI Software Stack](Lab-3.md)**
-- [Step 1: Hallucination Test](Lab-3.md#step-1-hallucination-test)
-- [Step 2: Creating the Local "Knowledge Base"](Lab-3.md#step-2-creating-local-knowledge-base)
-- [Step 3: Context Injection (Manual RAG)](Lab-3.md#step-3-context-injection-manual-rag)
-- [Step 4: Monitoring the "Context Tax"](Lab-3.md#step-4-monitoring-the-context-tax)
-- [Step 5: Lab Report — Data Sovereign Audit](Lab-3.md#step-5-lab-report-data-sovereign-audit)
+- [Hallucination Test](Lab-3.md#hallucination-test)
+- [Creating the Local "Knowledge Base"](Lab-3.md#creating-local-knowledge-base)
+- [Context Injection (Manual RAG)](Lab-3.md#context-injection-manual-rag)
+- [Monitoring the "Context Tax"](Lab-3.md#monitoring-the-context-tax)
+- [Lab Report — Data Sovereign Audit](Lab-3.md#lab-report-data-sovereign-audit)
 - [Key Concept: "Short-Term Memory"](Lab-3.md#key-concept-short-term-memory)
 
 **[Ethics Audit](Lab-4.md)**
-- [Step 1: Understanding the "System Prompt"](Lab-4.md#step-1-understanding-the-system-prompt)
-- [Step 2: The Ethics "Guardrail" Challenge](Lab-4.md#step-2-the-ethics-guardrail-challenge)
-- [Step 3: The "Bias Audit" (Open Science Investigation)](Lab-4.md#step-3-the-bias-audit-open-science-investigation)
-- [Step 4: Hardening the AI (The "Sovereign" Guardrail)](Lab-4.md#step-4-hardening-the-ai-the-sovereign-guardrail)
-- [Step 5: Final Course Reflection — The "Capstone" Report](Lab-4.md#step-5-final-course-reflection-the-capstone-report)
+- [Understanding the "System Prompt"](Lab-4.md#understanding-the-system-prompt)
+- [The Ethics "Guardrail" Challenge](Lab-4.md#the-ethics-guardrail-challenge)
+- [The "Bias Audit" (Open Science Investigation)](Lab-4.md#the-bias-audit-open-science-investigation)
+- [Hardening the AI (The "Sovereign" Guardrail)](Lab-4.md#hardening-the-ai-the-sovereign-guardrail)
+- [Final Course Reflection — The "Capstone" Report](Lab-4.md#final-course-reflection-the-capstone-report)
 - [Lab: Sustainability Audit](Lab-4.md#lab-sustainability-audit)
 
 **[Final Project](Final-Project.md)**
@@ -48,8 +48,8 @@ All software choices are open source. The **IBM Granite 4.3** LLM was chosen bas
 
 **[Automated Benchmarking](Automated-Benchmarking.md)**
 - [Step 1: Install the Ollama Python Library](Automated-Benchmarking.md#step-1-install-the-ollama-python-library)
-- [Step 2: Create the scripts](Automated-Benchmarking.md#step-2-create-the-scripts)
-- [Step 3: Use in Lab](Automated-Benchmarking.md#step-3-use-in-lab)
+- [Step 2: Create the scripts](Automated-Benchmarking.md#create-the-scripts)
+- [Step 3: Use in Lab](Automated-Benchmarking.md#-use-in-lab)
 - [Final Lab Summary Table](Automated-Benchmarking.md#final-lab-summary-table)
 
 **[LLM Transparency](LLM-Transparency.md)**
