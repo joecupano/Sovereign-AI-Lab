@@ -74,7 +74,7 @@ remainng software. If you wish automated, execute the following script.
 ```
 
 If you wish to do a manual installation skip running the scripts and go
-to the next section. Otherwise jump to the **Your first Chat session** section
+to the next section. Otherwise jump to the **Install LLM Model (IBM Granite)** section
 
 ## Install Software Stack (Manual) 
 Trust but verify. Good for you in being adventurous.

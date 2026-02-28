@@ -64,4 +64,3 @@ All software choices are open source. The **IBM Granite 4.3** LLM was chosen bas
 - [Bare-Metal to Container use](Lab-Platform-Alternatives.md#bare-metal-to-container-use)
 - [Comparison](Lab-Platform-Alternatives.md#comparison)
 - [Example Container deployment model](Lab-Platform-Alternatives.md#example-container-deployment-model)
-- [AMD GPU](Lab-Platform-Alternatives.md)
