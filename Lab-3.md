@@ -1,89 +1,27 @@
-# Lab 3
+# LLM Experimentation
+A gentle reminder that there is no perfectly sovereign AI LLM model available today. Every model we are using in the 3B-8B range was built using tools, data, and infrastructure with some foreign jurisdiction dependency. Your choice of a LLM model is not finding a mythically pure sovereign model it is reasoning systematically about dependency, risk, and acceptable tradeoff at every layer of the stack. The models suggested for experimentation here promote that reasoning process.
 
-## Lecture: The AI Software Stack
+## Meta LLaMA 3.2 3B and LLaMA 3.1 8B
+LLaMA models have become the de facto foundation layer of the open model ecosystem. Understanding LLaMA is understanding the baseline from which most serious sovereign AI fine-tuning work begins. While Meta is a US corporation subject to CLOUD Act jurisdiction model weights downloaded and stored within your sovereign environment are not subject to ongoing legal process, but the original training infrastructure and any fine-tuning services Meta offers are. Downloading weights once and operating them offline is the sovereign posture.
 
-### Useful Background
-*Focus: Moving from "Chatting" to "Building." How is the "brain" built? Programming with local models.*
+**LLaMA 3.2 3B** is small enough to run on modest hardware making it ideal for lab experimentation.
 
-- **Data:** The Fuel of AI. Where does training data come from? Discussion on web-scraping, licensing, and human data labeling. How RAG (Retrieval Augmented Generation) gives an AI a "textbook" so it stops hallucinating.
-- **Models & Algorithms:** High-level overview of Large Language Models (LLMs) and Diffusion models (images).
-- **The Middleware:** Understanding APIs (Application Programming Interfaces). How does an app "talk" to a model? Explain that AI is just a function that takes a string and returns a string.
-- **The User Interface:** Designing the chat box or app that humans actually interact with.
-- **Activity:** "Build the Stack" A paper exercise where students assemble a hypothetical AI app, identifying each layer from hardware to UI.
+**LLaMA 3.1 8B** represents a significant capability jump and is the workhorse model for many sovereign AI proof-of-concept deployments. It fits comfortably in 16GB of GPU memory in its base form and can be quantized to run on smaller hardware.
 
+## Mistral 7B
+Mistral AI is a French company founded in 2023 by former DeepMind and Meta researchers, explicitly positioned as a European sovereign AI champion. It was released under the **Apache 2.0 license** with no restrictions on commercial use, government use, or defense applications. This is a sovereign advantage over LLaMA's custom license. 
 
-## Optional Lab
-- **Quantization Exploration**. Compare performance of the same model in different "weights" between **llama3.1:8b** (high quality, slow) and **llama3.1:8b-instruct-q4_0** (lower quality, fast).
-- **Monitoring Thermal Loads**. Run **nvtop** to watch the clock speeds and temperature of the GPU graphically while running a heavy batch of prompts using **nvtop**. Students must identify the "Temperature" and "Fan Speed" spikes during heavy inference.
-- **Multi-Model Concurrency**. Try to run two models simultaneously (e.g., Mistral and Llama 3) to see at what point the VRAM run out of memory.
+With Mistral AI incorporated in France, subject to EU law, and with explicit backing from the French government and EU institutions makes it the most geopolitically sovereign option among leading open models for European sovereign AI programs. 
 
+## Apache 2.0 License versus LLaMA Community License versus fully proprietary
+Mistral's founding story, funding, and government relationships illustrate how a nation builds sovereign AI capability. Mistral's architectural innovations are well-documented and teach important concepts about efficient inference relevant to resource-constrained sovereign deployments. As a European model from a European company, Mistral is a natural vehicle for learning EU AI Act requirements.
 
-## Lab: Domain-centric AI
+Of course there are other LLMs you can [pull with Ollama](https://ollama.com/library) to consider for testing and substitue here.
 
-This lab introduces **RAG (Retrieval-Augmented Generation)**. Students will learn that an AI is only as good as the data it can access by bridging the gap between a "Pre-trained" model and "Private Data" by using a local document-feeding technique. They will give their local **IBM Granite** model "temporary sight" by feeding the model specific local documents to analyze, **ensuring no data ever leaves the LAB server.**
-
-### Step 1: Hallucination Test
-
-First, we must prove why RAG is necessary. We will ask the model about a document it has never seen.
-
-1. **Open Terminal** and run: **ollama run granite4:3b**
-2. **Ask the Model:** *"What are the procedures to shutdown the M6 Multitronic Computer?"*
-3. **Observe:** The model will either say it doesn't know or, more likely, "hallucinate" a generic answer.
-4. **Exit:** Type **/exit**
-
-![Hallucination](/pix/Lab3_Hallucinating.png "Hallucination")
-
-### Step 2: Creating Local Knowledge Base
-
-Now create a "Private" data file that contains information the model couldn't possibly know.
-
-1. **Create a Text File:** Open the text editor (Gedit) and save a file named **m6_rules.txt**.
-2. **Input Data:** Type several unique, specific facts into the file:
+With Ollama already running as a system service, we pull the Mistral 7B model.
 
 ```
-Step 1: All GPUs must be cooled to below 70°C before shutdown.
-Step 2: Disconnect the CAT500G network cable.
-Step 3: Wait five minutes and enter the command STFU --now.
+ollama pull mistral
 ```
 
-3.  **Save and Close.**
-
-### Step 3: "Context Injection" (Manual RAG)
-
-We will now "feed" this file into the model's short-term memory (Context Window) using a Linux "Pipe."
-
-1.  **The Command:**
-
-```
-cat m6_rules.txt \| ollama run granite4:3b "Using only the provided text, How do I shutdown the M6 Multitronic computer?"
-```
-
-The model should have a much better response.
-
-![Useful responser](/pix/Lab3_Correct-Response.png "Useful Response")
-
-
-### Step 4: Monitoring the "Context Tax"
-
-Adding data to a prompt costs and consumes hardware resources.
-
-1. **Open nvtop** in a side window.
-2. **Run a "Long RAG" test:** Copy and paste a large Wikipedia article into a text file and pipe it to Granite.
-3. **Audit Task:** Observe the **VRAM** usage in **nvtop**
-    - As the "Context Window" (the amount of text you feed the AI) grows, the GPU has to work harder to "remember" the beginning of the text while reading the end.
-
-### Step 5: Lab Report — Data Sovereign Audit
-
-Answer the following:
-
-| **Question**       | **Student Observation**                                                         |
-|--------------------|---------------------------------------------------------------------------------|
-| **Initial Answer** | How did the model respond before it saw **lab_rules.txt**?                      |
-| **RAG Accuracy**   | Did the model follow the instruction "Using only the provided text"?            |
-| **Privacy**        | Explain why this method is safer for a hospital or law firm than using ChatGPT. |
-| **Hardware Limit** | Look at the GPU VRAM. If we fed it a 500-page book, what would happen?          |
-
-### Key Concept: "Short-Term Memory"
-
-"The **Model (Granite)** is like a genius who has read the whole internet but has amnesia about your life. **RAG** is like handing that genius a single piece of paper. They don't 'learn' the paper forever; they just hold it in their hand while answering your question."
-
+Go on re-run the exercises in Lab starting from the [Setup](Lab-2.md#setup) section usig Mistral for any references to Granite.

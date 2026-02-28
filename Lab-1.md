@@ -162,15 +162,9 @@ ollama pull granite4:3b
 
 ![Ollama pull](https://raw.githubusercontent.com/wiki/joecupano/sovereign-ai-course/pix/Lab1_Ollama-Pull.png "Ollama pull")
 
-Let;s go ahead and reboot
-
-```
-sudo reboot
-```
 
 ## Your first Chat session
-After reboot and with Ollama already running as a system service you can run your
-first chat session.:
+With Ollama already running as a system service you can run your first chat session:
 
 ```
 ollama run granite4:3b
