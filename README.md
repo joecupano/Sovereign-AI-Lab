@@ -26,15 +26,17 @@ All software choices are open source. The **IBM Granite 4.3** LLM was chosen bas
 - [CPU Stress Test (Forced Mode)](Lab-2.md#cpu-stress-test-forced-mode)
 - [Lab Analysis & Report](Lab-2.md#lab-analysis-report)
 
+**[LLM Experimentation](Lab-3.md)**
+- [Meta LLaMA 3.2 3B and LLaMA 3.1 8B](Lab-3.md#meta-llama-32-3b-and-llama-31-8b)
+- [Apache 2.0 License vs LLaMA Community License vs Proprietary](Lab-3.md#apache-20-license-vs-llama-community-license-vs-proprietary)
+- [Testing other LLMs](Lab-3.md#testing-other-llms)
 
-
-**[AI Software Stack](Lab-4.md)**
+**[Domain-centric AI with Local RAG](Lab-4.md)**
 - [Hallucination Test](Lab-4.md#hallucination-test)
-- [Creating the Local "Knowledge Base"](Lab-4.md#creating-local-knowledge-base)
+- [Creating Local Knowledge](Lab-4.md#creating-local-knowledge)
 - [Context Injection (Manual RAG)](Lab-4.md#context-injection-manual-rag)
-- [Monitoring the "Context Tax"](Lab-4.md#monitoring-the-context-tax)
-- [Lab Report — Data Sovereign Audit](Lab-4.md#lab-report-data-sovereign-audit)
-- [Key Concept: "Short-Term Memory"](Lab-4.md#key-concept-short-term-memory)
+- [Performance](Lab-4.md#performance)
+- [Findings](Lab-4.md#findings)
 
 **[Ethics Audit](Lab-5.md)**
 - [Understanding the "System Prompt"](Lab-5.md#understanding-the-system-prompt)
