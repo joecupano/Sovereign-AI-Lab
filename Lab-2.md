@@ -28,13 +28,11 @@ CPUs are better for AI workloads that involve complex control flow, sparse or ir
 While GPUs deliver far more FLOPS per watt on matrix workloads than CPUs for large-scale AI, this gap is being challenged by dedicated AI ASICs like Google's TPUs
 
 ## Auditing CPU vs GPU
-
-We will continue to use the IBM Granite 4:3B model to scientifically measure and visualize the "Compute Gap" between general-purpose (CPU) and parallel (GPU) architectures.
+We will continue to use the IBM Granite 4:3B model to scientifically measure and visualize the performance gap between general-purpose (CPU) and parallel (GPU) architectures.
 
 When **Ollama** starts it will automatically detect your GPU and use it. But we can disable GPU use and have Ollama just use the CPU to demonstrate the difference in horsepower delivered between GPU and CPU in AI use. In this lab we will do just that and generate metrics for comparison. Let’s start by first rebooting the Lab server.
 
 ### Setup
-
 To see the difference, we need to monitor three resources simultaneously opening three separate terminal windows. We will refer to them as **Monitoring**, **Logging**, **Command** terminals respectively.
 
 **Monitoring Terminal** is for monitoring "GPU" and "VRAM" bars**.** Open a terminal and run the following command.
@@ -63,7 +61,6 @@ A table to document the data we will be gathering:
 | **"Feel" (Lag/Smoothness)** |              |              |                  |
 
 ### GPU Baseline (Standard Mode)
-
 In the **Command Terminal**, run the Granite model with the **--verbose flag**. This flag is critical because it tells Ollama to print precise timing data after every response.
 
 ```
@@ -81,12 +78,12 @@ Your **Monitoring Terminal** may show activity similar to this during the run:
 ![GPU Activity](/pix/Lab2_GPU-Run.png "GPU Activity")
 
 ### CPU Stress Test (Forced Mode)
-
 Now, we will intentionally "break" the hardware acceleration to force the CPU to do all the work. Exit the current prompt chat in **Command Terminal** by typing **/exit** or press **Ctrl+D**. Next, will stop the background service from the **Command Terminal** and restart it with the GPU hidden.
 
 ```
 sudo systemctl stop ollama
 export CUDA_VISIBLE_DEVICES=-1
+export OLLAMA_DEBUG=1
 ollama serve
 ```
 

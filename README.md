@@ -38,13 +38,19 @@ All software choices are open source. The **IBM Granite 4.3** LLM was chosen bas
 - [Performance](Lab-4.md#performance)
 - [Findings](Lab-4.md#findings)
 
-**[Ethics Audit](Lab-5.md)**
-- [Understanding the "System Prompt"](Lab-5.md#understanding-the-system-prompt)
-- [The Ethics "Guardrail" Challenge](Lab-5.md#the-ethics-guardrail-challenge)
-- [The "Bias Audit" (Open Science Investigation)](Lab-5.md#the-bias-audit-open-science-investigation)
-- [Hardening the AI (The "Sovereign" Guardrail)](Lab-5.md#hardening-the-ai-the-sovereign-guardrail)
-- [Final Course Reflection — The "Capstone" Report](Lab-5.md#final-course-reflection-the-capstone-report)
-- [Lab: Sustainability Audit](Lab-5.md#lab-sustainability-audit)
+**[Power Consumption](Lab-5.md)**
+- [Physical Setup"](Lab-5.md#physical-setup)
+- [GPU Mode Consumption](Lab-5.md#gpu-mode-consumption)
+- [CPU Mode Consumption](Lab-5.md#cpu-mode-consumption)
+- [Summary](Lab-5.md#summary)
+
+**[Ethics](Lab-6.md)**
+- [Understanding the "System Prompt"](Lab-6.md#understanding-the-system-prompt)
+- [The Ethics "Guardrail" Challenge](Lab-6.md#the-ethics-guardrail-challenge)
+- [The "Bias Audit" (Open Science Investigation)](Lab-6.md#the-bias-audit-open-science-investigation)
+- [Hardening the AI (The "Sovereign" Guardrail)](Lab-6.md#hardening-the-ai-the-sovereign-guardrail)
+- [Final Course Reflection — The "Capstone" Report](Lab-6.md#final-course-reflection-the-capstone-report)
+- [Lab: Sustainability Audit](Lab-6.md#lab-sustainability-audit)
 
 **[Final Project](Final-Project.md)**
 
