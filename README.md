@@ -52,8 +52,6 @@ All software choices are open source. The **IBM Granite 4.3** LLM was chosen bas
 - [Final Course Reflection — The "Capstone" Report](Lab-6.md#final-course-reflection-the-capstone-report)
 - [Lab: Sustainability Audit](Lab-6.md#lab-sustainability-audit)
 
-**[Final Project](Final-Project.md)**
-
 **[Useful commands](Useful-commands.md)**
 
 **[Automated Benchmarking](Automated-Benchmarking.md)**

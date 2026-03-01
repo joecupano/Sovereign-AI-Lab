@@ -1,18 +1,16 @@
-## Lab Platform Alternatives
+# Lab Platform Alternatives
 
-The choice to use a bare-metal full standalone lab server was deliberate to readily demonstrate and measure a Sovereign AI solution with least amount of environment variables to contend with. For those comfortable with advanced administration of Windows 11 and Ubuntu, here are some other lab options you may consider
+The choosing a bare-metal lab server was to readily demonstrate and measure a Sovereign AI solution with least amount of environment variables to contend with. For those comfortable with advanced administration of Windows 11 and Ubuntu, here are some other lab options you may consider
 
 ### Windows 11 and WSL 2
-
 The hardware requirements remain the same in this configuration with Ubuntu 24.04 on WSL 2. The reason we do not use Ubuntu VM on Hyper-V is the “gymnastics” involved in supporting GPU-passthrough.
 
 The gymnastics involve learning how to use Discrete Device Assignment (DDA) to pass an entire PCIe device into a virtual machine (VM) on standalone Hyper-V hosts with PowerShell. Doing so allows high performance access to devices like [NVMe storage](https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/deploy/deploying-storage-devices-using-dda) or graphics cards from within a VM while being able to apply the device's native drivers. As with CPU stress testing, any GPU use seen is by the Windows desktop environment.
 
 ### Bare-Metal to Container use
-
 Leveraging a containerized design versus a **bare-metal server** installation involves a strategic trade-off between **operational agility** and **system transparency**.
 
-While the previous labs focused on bare-metal to give students "direct-to-silicon" visibility, the containerized approach is the industry standard for production-grade AI.
+While the labs focused on bare-metal to give students "direct-to-silicon" visibility, the containerized approach is the industry standard for production-grade AI.
 
 #### Strengths of Containerized Design (Agility)
 
@@ -45,7 +43,7 @@ The GitHub project **joecupano/airgap-lab-ai** is focused on Sovereign AI that h
 
 - **Strict "Airgap" Focus:** The project provides a blueprint for running AI completely offline. Since your curriculum emphasizes the "physical layer" and "infrastructure layer," this project demonstrates how to decouple an AI solution from the global internet, reinforcing the concept of local sovereignty.
 - **Compatibility with Ollama & Ubuntu:** The project is built around the **Ollama** engine and **Linux (Ubuntu/Debian)**, which are the same tools you’ve selected. It provides the scripts and configuration files needed to manage the local model library without needing an external API.
-- **Hardware Efficiency:** The design is optimized for "Workstation-class" hardware rather than multi-million dollar clusters. It provides specific instructions on how to handle the memory constraints of an 6GB VRAM card (like your RTX 3050) when running 7B and 8B models like IBM Granite or OLMo.
+- **Hardware Efficiency:** The design is optimized for "Workstation-class" hardware rather than multi-million dollar clusters. It provides specific instructions on how to handle the memory constraints smaller GPUs with 6GB VRAM when running 7B and 8B models like IBM Granite or OLMo.
 - **Infrastructure**: Shows how "The Cloud" is not a requirement for AI. By following the project's networking configurations, students can see how to set up a private, local network where their workstations act as the "Data Center."
 - **Software Stack:** Includes scripts for **Model Management**. Students can see how to "sideload" model files (GGUF format) that they might have downloaded on a secure machine and moved to the air-gapped lab via a verified USB drive.
 - **Ethics & Privacy:** Solid proof of concept for **Data Privacy**. You can demonstrate that no prompt or data ever leaves the room, which is a major requirement for industries like healthcare, defense, and high-level legal work.
