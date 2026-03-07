@@ -11,6 +11,8 @@ The technology stack used in the production and testing of the labs was a **Dell
 
 All software choices are open source. The **IBM Granite 4.3** LLM was chosen based on transparency and tracebility in satsifying **Supply Chain of Custody**. The IBM Granite 4.0 family LLM models have the strongest, most independently‑verified transparency as verified by [Stanford CRFM](https://crfm.stanford.edu/). It documents that IBM discloses 2.5 trillion training tokens, 20 named data sources, and other governance details. Other rated LLMs are mentioned in the **LLM Transparency section**.
 
+**[Lab Foundation](Lab-0.md)**
+
 **[Build the Lab](Lab-1.md)**
 - [Hardware](Lab-1.md#hardware)
 - [Software](Lab-1.md#software)
