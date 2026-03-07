@@ -21,7 +21,7 @@ tested with hardware on it's own segment connected to a [pfSense firewall](https
 ## Legal Jurisdiction and Data Privacy Law
 
 **Exercise**
-Referencing the guide, record the **legal jurisdiction** and **data privacy** laws your **on-premise private cloud** is subject to.
+- Referencing the guide, record the **legal jurisdiction** and **data privacy** laws your **on-premise private cloud** is subject to.
 
 ## Supply Chain Root of Trust
 ### Hardware
@@ -60,7 +60,7 @@ Your lab server hardware needs to meet following minimum specifications:
 | Network Interface | 1GB                            |
 
 **Exercise**
-Find supply chain security attestations for all system components used in your lab.
+- Find supply chain security attestations for all system components used in your lab.
 
 ### Software
 The layers of software to be installed in order include:
