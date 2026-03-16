@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# Find blobs associated with granite model
+GRANITE_MANIFEST=$(find ~/.ollama/models/manifests -path "*granite*" | head -1)
+echo "Manifest: $GRANITE_MANIFEST"
+cat "$GRANITE_MANIFEST"

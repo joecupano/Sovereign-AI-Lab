@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Generate SBOM for installed Python packages
+syft dir:/ --catalogers python-installed-package-cataloger \
+  -o cyclonedx-json > ~/sbom-lab/python-sbom.json 2>/dev/null
+
+echo "Python package count:"
+wc -l ~/sbom-lab/pip-packages.txt
+
+# Identify the AI-specific packages and their origins:
+# Filter for AI/ML relevant packages
+
+grep -iE "torch|tensorflow|ollama|transformers|numpy|scipy|cuda|onnx|llama|hugging" \
+  ~/sbom-lab/pip-packages.txt

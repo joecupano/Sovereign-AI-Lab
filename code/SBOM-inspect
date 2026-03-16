@@ -1,0 +1,11 @@
+#!/bin/python3
+
+import json, sys
+data = json.load(sys.stdin)
+components = data.get('components', [])
+print(f'Total components: {len(components)}')
+print()
+print('First 10 components:')
+for c in components[:10]:
+    print(f'  {c.get(\"name\",\"?\")} {c.get(\"version\",\"?\")} [{c.get(\"type\",\"?\")}]')
+"

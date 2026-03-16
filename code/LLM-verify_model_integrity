@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# Sovereign AI Model Integrity Verification
+verify_model_integrity() {
+  echo "=== Model Integrity Check ===" 
+  echo "Date: $(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+  echo ""
+  
+  MISMATCH=0
+  
+  while read expected_hash size path; do
+    if [ -f "$path" ]; then
+      current_hash=$(sha256sum "$path" | awk '{print $1}')
+      if [ "$expected_hash" = "$current_hash" ]; then
+        echo "PASS  $path"
+      else
+        echo "FAIL  $path"
+        echo "      Expected: $expected_hash"
+        echo "      Current:  $current_hash"
+        MISMATCH=1
+      fi
+    else
+      echo "MISSING  $path"
+      MISMATCH=1
+    fi
+  done < <(grep -E "^[a-f0-9]{64}" ~/model-hash-record.txt)
+  
+  echo ""
+  if [ $MISMATCH -eq 0 ]; then
+    echo "RESULT: All model blobs VERIFIED integrity confirmed"
+  else
+    echo "RESULT: INTEGRITY FAILURE investigate before using model"
+  fi
+}
+
+verify_model_integrity

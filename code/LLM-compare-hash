@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Show Ollama's own digest for each model
+ollama list | tail -n +2 | while read model tag id size modified; do
+  echo "=== $model:$tag ==="
+  echo "Ollama ID: $id"
+  # Show the manifest for this model
+  MODEL_PATH=$(echo "$model" | tr '/' '_' | tr ':' '_')
+  find ~/.ollama/models/manifests -name "*" -type f | xargs grep -l "$id" 2>/dev/null | head -1
+  echo ""
+done
+```

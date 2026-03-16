@@ -1,0 +1,5 @@
+Patient Discharge Protocol — Memorial General Hospital
+Step 1: Confirm all medications have been reviewed by the attending physician.
+Step 2: Provide the patient with a printed discharge summary listing diagnosis and follow-up dates.
+Step 3: Arrange transport or confirm the patient has a responsible adult to escort them.
+Step 4: Notify the billing department so the room can be cleared and the account closed.

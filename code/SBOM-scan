@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Scan the OS SBOM
+echo "=== OS Vulnerability Scan ===" | tee ~/sbom-lab/vulnerability-report.txt
+grype sbom:~/sbom-lab/os-sbom-cyclonedx.json \
+  --output table 2>/dev/null | tee -a ~/sbom-lab/vulnerability-report.txt
+
+echo "" | tee -a ~/sbom-lab/vulnerability-report.txt
+echo "=== OS Vulnerability Summary ===" | tee -a ~/sbom-lab/vulnerability-report.txt
+grype sbom:~/sbom-lab/os-sbom-cyclonedx.json \
+  --output json 2>/dev/null | python3 -c "
+import json, sys
+from collections import Counter
+data = json.load(sys.stdin)
+matches = data.get('matches', [])
+severities = Counter(m['vulnerability']['severity'] for m in matches)
+print(f'Total vulnerabilities: {len(matches)}')
+for sev, count in sorted(severities.items()):
+    print(f'  {sev}: {count}')
+" | tee -a ~/sbom-lab/vulnerability-report.txt
+
+# Show critical and high severity findings
+echo "" | tee -a ~/sbom-lab/vulnerability-report.txt
+echo "=== Critical and High Severity ===" | tee -a ~/sbom-lab/vulnerability-report.txt
+grype sbom:~/sbom-lab/os-sbom-cyclonedx.json \
+  --output json 2>/dev/null | python3 -c "
+import json, sys
+data = json.load(sys.stdin)
+matches = data.get('matches', [])
+for m in matches:
+    sev = m['vulnerability']['severity']
+    if sev in ('Critical', 'High'):
+        vuln = m['vulnerability']
+        pkg = m['artifact']
+        print(f\"{sev:8} {vuln.get('id','?'):20} {pkg.get('name','?')} {pkg.get('version','?')}\")
+" | tee -a ~/sbom-lab/vulnerability-report.txt
+
+cat ~/sbom-lab/vulnerability-report.txt

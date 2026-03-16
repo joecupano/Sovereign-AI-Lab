@@ -1,0 +1,10 @@
+
+#!/bin/bash
+
+# Show model manifests these describe which blobs make up each model
+find ~/.ollama/models/manifests -type f | while read f; do
+  echo "=== $f ==="
+  cat "$f" | python3 -m json.tool 2>/dev/null || cat "$f"
+  echo ""
+done
+```

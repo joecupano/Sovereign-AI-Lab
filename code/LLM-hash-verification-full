@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# Create a comprehensive model registry for your lab
+echo "=== SOVEREIGN AI LAB MODEL REGISTRY ===" > ~/sovereign-model-registry.txt
+echo "Created: $(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> ~/sovereign-model-registry.txt
+echo "Operator: $(whoami)@$(hostname)" >> ~/sovereign-model-registry.txt
+echo "" >> ~/sovereign-model-registry.txt
+
+# List all models Ollama knows about
+echo "=== OLLAMA MODEL INVENTORY ===" >> ~/sovereign-model-registry.txt
+ollama list >> ~/sovereign-model-registry.txt
+echo "" >> ~/sovereign-model-registry.txt
+
+# Hash all blobs
+echo "=== BLOB HASHES ===" >> ~/sovereign-model-registry.txt
+find ~/.ollama/models/blobs -type f | sort | while read blob; do
+  printf "%s  %s  %s\n" \
+    "$(sha256sum "$blob" | awk '{print $1}')" \
+    "$(du -h "$blob" | awk '{print $1}')" \
+    "$(basename $blob)" >> ~/sovereign-model-registry.txt
+done
+
+# Hash manifests
+echo "" >> ~/sovereign-model-registry.txt
+echo "=== MANIFEST HASHES ===" >> ~/sovereign-model-registry.txt
+find ~/.ollama/models/manifests -type f | sort | while read mf; do
+  printf "%s  %s\n" \
+    "$(sha256sum "$mf" | awk '{print $1}')" \
+    "$mf" >> ~/sovereign-model-registry.txt
+done
+
+# Sign the registry with its own hash
+echo "" >> ~/sovereign-model-registry.txt
+echo "=== REGISTRY INTEGRITY HASH ===" >> ~/sovereign-model-registry.txt
+sha256sum ~/sovereign-model-registry.txt >> ~/sovereign-model-registry.txt
+
+cat ~/sovereign-model-registry.txt

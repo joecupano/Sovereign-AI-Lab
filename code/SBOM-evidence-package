@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# Create final SBOM evidence package
+mkdir -p ~/sbom-evidence-package
+cp ~/sbom-lab/os-sbom-cyclonedx.json ~/sbom-evidence-package/
+cp ~/sbom-lab/os-sbom-spdx.json ~/sbom-evidence-package/
+cp ~/sbom-lab/python-sbom.json ~/sbom-evidence-package/ 2>/dev/null || true
+cp ~/sbom-lab/ollama-sbom.json ~/sbom-evidence-package/ 2>/dev/null || true
+cp ~/sbom-lab/ollama-binary-hash.txt ~/sbom-evidence-package/ 2>/dev/null || true
+cp ~/sbom-lab/pip-packages.txt ~/sbom-evidence-package/
+cp ~/sbom-lab/vulnerability-report.txt ~/sbom-evidence-package/
+cp ~/sbom-lab/sovereign-stack-inventory.txt ~/sbom-evidence-package/
+cp ~/sbom-lab/sovereignty-assessment.txt ~/sbom-evidence-package/
+cp ~/sovereign-model-registry.txt ~/sbom-evidence-package/ 2>/dev/null || echo "Run Lab-3 model hash exercise first"
+cp ~/tpm-attestation-record.txt ~/sbom-evidence-package/ 2>/dev/null || echo "Run Lab-1 TPM exercise first"
+
+# Generate a manifest of the evidence package
+echo "=== SBOM EVIDENCE PACKAGE MANIFEST ===" > ~/sbom-evidence-package/MANIFEST.txt
+echo "Created: $(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> ~/sbom-evidence-package/MANIFEST.txt
+echo "Operator: $(whoami)@$(hostname)" >> ~/sbom-evidence-package/MANIFEST.txt
+echo "" >> ~/sbom-evidence-package/MANIFEST.txt
+ls -lah ~/sbom-evidence-package/ >> ~/sbom-evidence-package/MANIFEST.txt
+echo "" >> ~/sbom-evidence-package/MANIFEST.txt
+
+# Hash every file in the package for tamper-evidence
+echo "=== FILE HASHES ===" >> ~/sbom-evidence-package/MANIFEST.txt
+find ~/sbom-evidence-package -type f ! -name "MANIFEST.txt" | sort | while read f; do
+  sha256sum "$f" >> ~/sbom-evidence-package/MANIFEST.txt
+done
+
+cat ~/sbom-evidence-package/MANIFEST.txt
+
+echo ""
+echo "Evidence package location: ~/sbom-evidence-package/"
+ls ~/sbom-evidence-package/

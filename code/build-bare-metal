@@ -1,0 +1,271 @@
+#!/usr/bin/env bash
+
+# USAGE:
+#
+#  build-bare-metal
+#
+# DESCRIPTION:
+#  Given a fresh Ubuntu 24.04 install, this script sets up the Sovereign AI Lab
+#  environment by detecting installed hardware and software, installing only
+#  what is missing, and configuring Ollama as a manually-started service.
+#
+# STEPS:
+#  1. Update Repositories
+#  2. Detect GPU and Install Drivers (if missing)
+#  3. Install OS Build Utilities (if missing)
+#  4. Install GPU Utilities (if missing)
+#  5. Install Python Environment and Development Utilities (if missing)
+#  6. Install Ollama (service disabled — started manually)
+#
+
+set -euo pipefail
+
+# ── Colour helpers ────────────────────────────────────────────────────────────
+BOLD='\033[1m'
+CYAN='\033[1;36m'
+GREEN='\033[1;32m'
+YELLOW='\033[1;33m'
+RED='\033[1;31m'
+RESET='\033[0m'
+
+header()  { echo -e "\n${CYAN}══════════════════════════════════════════════════════${RESET}"; \
+            echo -e "${CYAN}  $*${RESET}"; \
+            echo -e "${CYAN}══════════════════════════════════════════════════════${RESET}"; }
+info()    { echo -e "${BOLD}▶ $*${RESET}"; }
+success() { echo -e "${GREEN}✔ $*${RESET}"; }
+warn()    { echo -e "${YELLOW}⚠ $*${RESET}"; }
+fail()    { echo -e "${RED}✘ $*${RESET}"; exit 1; }
+note()    { echo -e "  ${YELLOW}NOTE: $*${RESET}"; }
+
+# ── Helper functions ──────────────────────────────────────────────────────────
+install_apt_packages() {
+	sudo apt install "$@" -y
+}
+
+detect_gpu_vendor() {
+	local gpu_info
+	gpu_info=$(lspci 2>/dev/null | grep -Ei 'VGA|3D|Display' || true)
+
+	if echo "$gpu_info" | grep -qi 'NVIDIA'; then
+		echo "nvidia"
+	elif echo "$gpu_info" | grep -Eqi 'AMD|ATI'; then
+		echo "amd"
+	elif echo "$gpu_info" | grep -qi 'Intel'; then
+		echo "intel"
+	else
+		echo "none"
+	fi
+}
+
+is_nvidia_driver_installed() {
+	command -v nvidia-smi >/dev/null 2>&1 && nvidia-smi >/dev/null 2>&1
+}
+
+is_amd_driver_installed() {
+	lsmod | grep -q '^amdgpu'
+}
+
+is_intel_driver_installed() {
+	lsmod | grep -q '^i915'
+}
+
+get_nvidia_utils_package() {
+	local pkg
+
+	for pkg in nvidia-utils-565-server nvidia-utils-565 nvidia-utils-550-server nvidia-utils-550; do
+		if apt-cache show "$pkg" >/dev/null 2>&1; then
+			echo "$pkg"
+			return
+		fi
+	done
+
+	pkg=$(apt-cache search '^nvidia-utils-[0-9]+' 2>/dev/null | awk '{print $1}' | grep -E '^nvidia-utils-[0-9]+(-server)?$' | sort -V | tail -n 1)
+	if [ -n "$pkg" ]; then
+		echo "$pkg"
+	else
+		echo "nvidia-utils"
+	fi
+}
+
+install_gpu_drivers_if_missing() {
+	local gpu_vendor
+	gpu_vendor=$(detect_gpu_vendor)
+
+	info "Detected GPU vendor: ${gpu_vendor}"
+
+	case "$gpu_vendor" in
+		nvidia)
+			if is_nvidia_driver_installed; then
+				success "NVIDIA driver already installed — skipping driver installation."
+			else
+				warn "NVIDIA GPU detected but driver appears missing."
+				info "Installing NVIDIA driver via ubuntu-drivers autoinstall..."
+				note "ubuntu-drivers selects the recommended driver version for your GPU."
+				note "This may take several minutes and requires internet access."
+				sudo ubuntu-drivers autoinstall
+				success "NVIDIA driver installation complete."
+			fi
+			;;
+		amd)
+			if is_amd_driver_installed; then
+				success "AMD driver already loaded — skipping driver installation."
+			else
+				warn "AMD GPU detected but driver appears missing."
+				info "Installing AMD GPU support packages..."
+				note "firmware-amd-graphics provides GPU microcode; mesa packages provide Vulkan and OpenCL."
+				install_apt_packages firmware-amd-graphics mesa-vulkan-drivers mesa-opencl-icd
+				success "AMD GPU support packages installed."
+			fi
+			;;
+		intel)
+			if is_intel_driver_installed; then
+				success "Intel GPU driver already loaded — skipping driver installation."
+			else
+				warn "Intel GPU detected but driver appears missing."
+				info "Installing Intel GPU support packages..."
+				note "intel-media-va-driver-non-free enables hardware video acceleration on Intel iGPUs."
+				install_apt_packages intel-media-va-driver-non-free mesa-vulkan-drivers
+				success "Intel GPU support packages installed."
+			fi
+			;;
+		*)
+			info "No supported discrete GPU detected — skipping GPU driver installation."
+			note "If you have a GPU that was not detected, verify lspci output and re-run."
+			;;
+	esac
+}
+
+# ── Banner ────────────────────────────────────────────────────────────────────
+header "Build Sovereign AI Lab — Lab 3: Install Software Stack"
+echo ""
+echo "  Given a fresh Ubuntu 24.04 install, this script sets up the Sovereign AI Lab"
+echo "  environment by performing the following steps in order:"
+echo ""
+echo "  1. Update Repositories"
+echo "  2. Detect GPU and Install Drivers (if missing)"
+echo "  3. Install OS Build Utilities (if missing)"
+echo "  4. Install GPU Utilities (if missing)"
+echo "  5. Install Python Environment and Development Utilities (if missing)"
+echo "  6. Install Ollama (service disabled — started manually)"
+echo ""
+note "Each step announces what it is doing and why before acting."
+note "No step is silent — you can follow the installation chain of custody."
+echo ""
+warn "This script requires sudo privileges and an active internet connection."
+echo ""
+info "Press any key to continue or Ctrl-C to exit..."
+read -n 1 -s -r
+echo ""
+
+# =============================================================================
+# STEP 1: Update Repositories
+# =============================================================================
+header "STEP 1 — Update Repositories"
+info "Refreshing the apt package index and upgrading installed packages..."
+note "This ensures all subsequent installs pull the latest available versions."
+note "Running: sudo apt update && sudo apt upgrade -y"
+echo ""
+sudo apt update && sudo apt upgrade -y
+success "Repository update and package upgrade complete."
+
+# =============================================================================
+# STEP 2: Detect GPU and Install Drivers
+# =============================================================================
+header "STEP 2 — Detect GPU and Install Drivers (if missing)"
+info "Scanning PCI devices to identify GPU vendor..."
+note "lspci is used to enumerate PCI devices and filter for VGA/3D/Display controllers."
+note "Driver installation is skipped if a working driver is already detected."
+echo ""
+install_gpu_drivers_if_missing
+gpu_vendor=$(detect_gpu_vendor)
+success "GPU detection and driver check complete. Detected vendor: ${gpu_vendor}"
+
+# =============================================================================
+# STEP 3: Install OS Build Utilities
+# =============================================================================
+header "STEP 3 — Install OS Build Utilities (if missing)"
+info "Installing essential build tools and development utilities..."
+note "build-essential: meta-package providing gcc, g++, make, and libc headers."
+note "git:             version control; required to clone lab repositories and model configs."
+note "gcc:             C compiler; required by some Python native extensions and Ollama builds."
+note "cmake:           build system generator; required by several ML framework dependencies."
+note "curl:            HTTP client; used by the Ollama installer and model download scripts."
+echo ""
+install_apt_packages build-essential git gcc cmake curl
+success "OS build utilities installed."
+
+# =============================================================================
+# STEP 4: Install GPU Utilities
+# =============================================================================
+header "STEP 4 — Install GPU Utilities (if missing)"
+info "Installing GPU monitoring and diagnostics utilities..."
+note "nvtop: interactive GPU process monitor (supports NVIDIA, AMD, and Intel)."
+note "btop:  interactive system resource monitor for CPU, memory, disk, and network."
+echo ""
+if [ "$gpu_vendor" = "nvidia" ]; then
+	nvidia_utils_package=$(get_nvidia_utils_package)
+	info "NVIDIA detected — also installing nvidia-utils package: ${nvidia_utils_package}"
+	note "nvidia-utils provides nvidia-smi and related diagnostic tools."
+	install_apt_packages "${nvidia_utils_package}" nvtop btop
+else
+	install_apt_packages nvtop btop
+fi
+success "GPU utilities installed."
+
+# =============================================================================
+# STEP 5: Install Python Environment and Development Utilities
+# =============================================================================
+header "STEP 5 — Install Python Environment and Development Utilities (if missing)"
+info "Installing Python 3 runtime and development libraries..."
+note "python3-pip:  Python package installer; used to install ML framework dependencies."
+note "python3-venv: virtual environment support; isolates project dependencies from system Python."
+note "python3-dev:  Python C headers; required to compile native Python extensions."
+note "These packages are the foundation for running inference frameworks above Ollama."
+echo ""
+install_apt_packages python3-pip python3-venv python3-dev
+success "Python environment and development utilities installed."
+
+# =============================================================================
+# STEP 6: Install Ollama
+# =============================================================================
+header "STEP 6 — Install Ollama"
+info "Downloading and running the official Ollama installer..."
+note "The installer at https://ollama.com/install.sh detects your GPU and installs"
+note "the appropriate Ollama binary and CUDA/ROCm runtime libraries automatically."
+note "After install, this script disables the systemd service so Ollama is started"
+note "manually — giving you explicit control over when the inference engine is running."
+echo ""
+curl -fsSL https://ollama.com/install.sh | sh
+
+echo ""
+info "Disabling the Ollama systemd service (manual start only)..."
+note "Ollama will NOT start automatically on boot after this step."
+note "To start Ollama manually: ollama serve &"
+note "To load and run a model: ollama run <model-name>"
+sudo systemctl stop ollama   2>/dev/null || true
+sudo systemctl disable ollama 2>/dev/null || true
+sudo systemctl mask ollama   2>/dev/null || true
+success "Ollama installed and service disabled."
+
+# =============================================================================
+# Summary
+# =============================================================================
+header "LAB 3 COMPLETE — Installation Summary"
+echo ""
+echo -e "  ${GREEN}✔${RESET}  Repository index updated and packages upgraded"
+echo -e "  ${GREEN}✔${RESET}  GPU vendor detected: ${gpu_vendor}"
+echo -e "  ${GREEN}✔${RESET}  GPU drivers checked / installed"
+echo -e "  ${GREEN}✔${RESET}  OS build utilities installed: build-essential git gcc cmake curl"
+echo -e "  ${GREEN}✔${RESET}  GPU utilities installed: nvtop btop"
+echo -e "  ${GREEN}✔${RESET}  Python environment installed: python3-pip python3-venv python3-dev"
+echo -e "  ${GREEN}✔${RESET}  Ollama installed — service masked (manual start only)"
+echo ""
+info "The system must reboot for all driver and kernel changes to take effect."
+info "Rebooting in 15 seconds — press Ctrl-C to cancel and reboot manually."
+echo ""
+note "After reboot, start Ollama manually with:  ollama serve &"
+note "Next lab: 4-Install-LLM.md"
+echo ""
+sleep 15
+sudo sync
+sudo reboot

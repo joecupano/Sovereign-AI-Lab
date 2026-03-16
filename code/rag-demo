@@ -1,0 +1,106 @@
+#!/usr/bin/env python3
+"""
+rag_demo.py — A minimal but complete RAG pipeline.
+
+Stages:
+  1. Load documents (the knowledge base)
+  2. Embed each document into a vector store  [INDEXING]
+  3. Embed the user query                     [QUERY]
+  4. Retrieve the most relevant document      [RETRIEVAL]
+  5. Augment the prompt and generate          [GENERATION]
+"""
+
+import math, requests
+
+EMBED_MODEL = "nomic-embed-text"
+LLM_MODEL   = "granite4:3b"
+OLLAMA_URL  = "http://localhost:11434"
+
+# ── Stage 1: Knowledge base ─────────────────────────────────────────────────
+# Four documents. Only one answers the question we will ask.
+documents = {
+    "patient_discharge.txt": open("patient_discharge.txt").read(),
+    "it_access.txt":         open("it_access.txt").read(),
+    "hr_leave.txt":          open("hr_leave.txt").read(),
+    "finance_budget.txt":    open("finance_budget.txt").read(),
+}
+
+# ── Helper functions ─────────────────────────────────────────────────────────
+def embed(text):
+    """Send text to the embedding model; return its vector."""
+    r = requests.post(f"{OLLAMA_URL}/api/embed",
+                      json={"model": EMBED_MODEL, "input": text})
+    r.raise_for_status()
+    return r.json()["embeddings"][0]
+
+def cosine_similarity(a, b):
+    """How similar are two vectors? 1.0 = identical direction, 0.0 = unrelated."""
+    dot  = sum(x * y for x, y in zip(a, b))
+    norm = math.sqrt(sum(x**2 for x in a)) * math.sqrt(sum(x**2 for x in b))
+    return dot / norm if norm else 0.0
+
+def ask_llm(prompt):
+    """Send a prompt to the LLM and return the text response."""
+    r = requests.post(f"{OLLAMA_URL}/api/generate",
+                      json={"model": LLM_MODEL, "prompt": prompt, "stream": False})
+    r.raise_for_status()
+    return r.json()["response"]
+
+# ── Stage 2: Build the vector store ─────────────────────────────────────────
+print("=" * 60)
+print("STAGE 2 — Indexing: embedding documents into vector store")
+print("=" * 60)
+vector_store = {}
+for name, text in documents.items():
+    vector_store[name] = {"text": text, "vector": embed(text)}
+    print(f"  Embedded: {name}")
+
+# ── Stage 3: Embed the query ─────────────────────────────────────────────────
+query = "What are the steps for discharging a patient?"
+print(f"\n{'=' * 60}")
+print(f"STAGE 3 — Query: \"{query}\"")
+print("=" * 60)
+query_vector = embed(query)
+print("  Query embedded.")
+
+# ── Stage 4: Retrieve the best-matching document ─────────────────────────────
+print(f"\n{'=' * 60}")
+print("STAGE 4 — Retrieval: computing cosine similarity scores")
+print("=" * 60)
+scores = {}
+for name, entry in vector_store.items():
+    scores[name] = cosine_similarity(query_vector, entry["vector"])
+
+for name, score in sorted(scores.items(), key=lambda x: x[1], reverse=True):
+    bar = "█" * int(score * 40)
+    print(f"  {score:.4f}  {bar}  {name}")
+
+best_match = max(scores, key=scores.get)
+print(f"\n  → Retrieved: {best_match}  (score: {scores[best_match]:.4f})")
+print(f"  → Discarded: {len(documents) - 1} irrelevant documents")
+
+# ── Stage 5: Augment prompt and generate ────────────────────────────────────
+retrieved_text = vector_store[best_match]["text"]
+augmented_prompt = f"""Using only the context below, answer the question.
+Do not use any outside knowledge.
+
+Context:
+{retrieved_text}
+
+Question: {query}
+Answer:"""
+
+print(f"\n{'=' * 60}")
+print("STAGE 5 — Generation: LLM response using retrieved context only")
+print("=" * 60)
+answer = ask_llm(augmented_prompt)
+print(answer)
+
+# ── Summary ──────────────────────────────────────────────────────────────────
+total_words  = sum(len(d["text"].split()) for d in vector_store.values())
+sent_words   = len(retrieved_text.split())
+print(f"\n{'─' * 60}")
+print(f"Total corpus:         {total_words} words across {len(documents)} documents")
+print(f"Sent to LLM:          {sent_words} words (1 retrieved chunk)")
+print(f"Context reduction:    {100 - round(sent_words / total_words * 100)}%")
+print("─" * 60)

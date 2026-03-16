@@ -1,0 +1,5 @@
+IT Access Provisioning Policy
+New accounts must be approved by the department manager before being created.
+Privileged access requires a second approval from the CISO.
+Accounts inactive for 90 days are automatically suspended.
+VPN credentials expire every 12 months.

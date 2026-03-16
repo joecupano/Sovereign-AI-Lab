@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Production sovereign model registry workflow (conceptual)
+# 1. Download model ONCE to air-gapped staging system
+# 2. Compute hash on staging
+# 3. Compare against publisher-signed digest
+# 4. If verified, transfer to internal model registry (JFrog Artifactory / Nexus)
+# 5. Never pull from Hugging Face or Ollama registry at runtime
+# 6. All production systems pull ONLY from internal registry
+# 7. Hash verified at deploy time and periodically in production
+
+# Minimum viable sovereign model pull (for reference):
+EXPECTED_HASH="<hash from approved internal registry>"
+ollama pull granite3.3
+ACTUAL_HASH=$(sha256sum ~/.ollama/models/blobs/sha256-* | awk '{print $1}' | sort | sha256sum | awk '{print $1}')
+
+if [ "$EXPECTED_HASH" = "$ACTUAL_HASH" ]; then
+  echo "Model approved for sovereign deployment"
+else
+  echo "Model hash mismatch DO NOT DEPLOY"
+  ollama rm granite3.3
+fi

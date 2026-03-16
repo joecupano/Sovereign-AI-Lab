@@ -1,0 +1,11 @@
+#!/bin/python3
+
+# Show package types breakdown
+
+import json, sys
+from collections import Counter
+data = json.load(sys.stdin)
+types = Counter(c.get('type','unknown') for c in data.get('components',[]))
+for t, count in types.most_common():
+    print(f'  {t}: {count}')
+"

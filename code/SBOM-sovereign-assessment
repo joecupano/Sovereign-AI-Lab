@@ -1,0 +1,50 @@
+#!/bin/bash
+
+# Generate a sovereignty assessment worksheet
+cat > ~/sbom-lab/sovereignty-assessment.txt << 'EOF'
+=== SOVEREIGN AI SOFTWARE STACK  SOVEREIGNTY ASSESSMENT ===
+Date: DATESTAMP
+
+Guide Reference Tests:
+  1. PROVENANCE   Do you know where this software came from and can you verify it?
+  2. CONTROL      Can you update/patch/replace it without depending on a foreign entity?
+  3. AUDITABILITY  Can you demonstrate exactly what it does and what data it touches?
+  4. CONTAINMENT  Is it prevented from communicating outside your sovereign boundary?
+
+--- Assessment ---
+
+Component: Ubuntu 24.04 OS
+  Provenance:    Canonical Ltd (UK-incorporated). Packages signed with Canonical GPG keys.
+                 Downloaded from public Ubuntu mirrors (Akamai CDN / US jurisdiction).
+  Control:       Can pin package versions. Private mirror needed for full control.
+  Auditability:  Open source. Full source available. Audit log via auditd.
+  Containment:   Makes outbound connections for apt updates. Controllable via firewall.
+  Gap:           No private package mirror in lab. Production requirement: internal mirror.
+
+Component: Ollama (model runtime, native binary)
+  Provenance:    Ollama Inc (US). Binary downloaded via curl | sh from ollama.com.
+                 No container layer — binary runs directly on the host OS under systemd.
+  Control:       Binary updates require connectivity to ollama.com. No offline update path.
+                 Binary hash recorded in ollama-binary-hash.txt for integrity verification.
+  Auditability:  Open source (MIT). Source available for review. systemd service definition
+                 captures runtime parameters and network exposure.
+  Containment:   Makes outbound connections during model pull and potentially at startup.
+                 Isolation relies on host firewall rules and systemd service hardening
+                 (PrivateNetwork, RestrictAddressFamilies) — not a container namespace.
+                 See Lab-1 Outbound Connections exercise for full inventory.
+  Gap:           No air-gap capable install path used. CLOUD Act jurisdiction applies to Ollama Inc.
+                 No container boundary; process isolation hardening via systemd is a production requirement.
+
+Component: IBM Granite Model Weights
+  Provenance:    IBM Research. Training data documented (Stanford CRFM verified).
+                 Downloaded from Ollama registry (US infrastructure).
+  Control:       Hash verified locally (see Lab-3). One-time download  no runtime pull.
+  Auditability:  IBM provides model cards. Training data sources documented.
+  Containment:   Model runs entirely locally once pulled. No inference-time external calls.
+  Gap:           Initial download required external connectivity. Production: internal registry.
+
+[Add additional components from your SBOM here]
+EOF
+
+sed -i "s/DATESTAMP/$(date -u +"%Y-%m-%dT%H:%M:%SZ")/" ~/sbom-lab/sovereignty-assessment.txt
+cat ~/sbom-lab/sovereignty-assessment.txt

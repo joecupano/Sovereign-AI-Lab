@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Locate the ollama binary
+which ollama
+
+# Generate an SBOM by scanning the ollama binary and its shared libraries
+syft file:$(which ollama) -o cyclonedx-json > ~/sbom-lab/ollama-sbom.json 2>/dev/null || \
+  syft dir:/usr/local/bin -o cyclonedx-json > ~/sbom-lab/ollama-sbom.json 2>/dev/null
+
+echo "Ollama binary version:"
+ollama --version
+
+# Record the binary hash for the model registry
+echo "=== OLLAMA BINARY HASH ===" > ~/sbom-lab/ollama-binary-hash.txt
+sha256sum $(which ollama) >> ~/sbom-lab/ollama-binary-hash.txt
+
+# Record the systemd service definition
+echo "" >> ~/sbom-lab/ollama-binary-hash.txt
+echo "=== OLLAMA SYSTEMD SERVICE ===" >> ~/sbom-lab/ollama-binary-hash.txt
+systemctl cat ollama 2>/dev/null >> ~/sbom-lab/ollama-binary-hash.txt || \
+  echo "ollama not managed by systemd (running as user process)" >> ~/sbom-lab/ollama-binary-hash.txt
+
+cat ~/sbom-lab/ollama-binary-hash.txt

@@ -1,0 +1,17 @@
+## Useful Commands
+
+| **Task**                                 | **Command**                             |
+|------------------------------------------|-----------------------------------------|
+| **Start/Stop/Status the AI Engine**      | sudo systemctl start/stop/status ollama |
+| **Restart the AI Engine**                | sudo systemctl restart ollama           |
+| **Download Granite 4.3B**                | ollama pull granite4:3b               |
+| **Enter the AI Chat**                    | ollama run granite4:3b                |
+| **List Installed Models**                | ollama list                             |
+| **Remove a Model**                       | ollama rm \<model_name\>                |
+| **Force CPU-Only Mode**                  | export CUDA_VISIBLE_DEVICES=-1          |
+| **Re-enable RTX 3050**                   | unset CUDA_VISIBLE_DEVICES              |
+| **Force CPU-Only Mode from within Chat** | /set parameter num_gpu 0                |
+| **View Real-Time Logs**                  | journalctl -u ollama -f                 |
+| **Check GPU Status**                     | nvidia-smi                              |
+| **Watch GPU Temperature**                | nvidia-smi -l 1                         |
+| **Watch GPU in Real-Time**               | nvtop                                   |

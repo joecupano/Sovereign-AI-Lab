@@ -1,0 +1,10 @@
+#!/bin/bash
+
+echo "" >> ~/model-hash-record.txt
+echo "=== SHA-256 Hashes of Model Manifests ===" >> ~/model-hash-record.txt
+
+find ~/.ollama/models/manifests -type f | sort | while read manifest; do
+  hash=$(sha256sum "$manifest" | awk '{print $1}')
+  echo "$hash  $manifest" | tee -a ~/model-hash-record.txt
+done
+```

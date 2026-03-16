@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Hash all model blobs
+echo "=== SHA-256 Hashes of Ollama Model Blobs ===" > ~/model-hash-record.txt
+echo "Date: $(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> ~/model-hash-record.txt
+echo "Platform: $(hostname)" >> ~/model-hash-record.txt
+echo "" >> ~/model-hash-record.txt
+
+find ~/.ollama/models/blobs -type f | sort | while read blob; do
+  hash=$(sha256sum "$blob" | awk '{print $1}')
+  size=$(du -h "$blob" | awk '{print $1}')
+  echo "$hash  $size  $blob" | tee -a ~/model-hash-record.txt
+done
+
+echo ""
+echo "Hash record saved to ~/model-hash-record.txt"
+cat ~/model-hash-record.txt

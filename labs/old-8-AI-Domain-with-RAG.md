@@ -1,0 +1,82 @@
+# Domain-Centric AI with Local RAG
+This lab introduces **Retrieval-Augmented Generation (RAG)**, a method that helps an AI answer questions using your own local documents. In this lab you will see how a pre-trained model can be grounded with private data at runtime, so responses are more accurate and less likely to hallucinate. By the end, you will understand how to give your local LLM Granite model temporary context from files stored on the lab server without sending sensitive information outside your environment.
+
+## Hallucination Test
+To prove why RAG is necessary we will ask the model about a document it has never seen. Open a **Terminal** and run the following:
+
+```
+ollama serve&
+ollama pull granite4:3b
+ollama run granite4:3b
+```
+
+Now ask the model the following question:
+
+*"What are the procedures to shut down the M6 Multitronic Computer?"*
+
+The model will either say it doesn't know or, more likely, "hallucinate" a generic answer.
+
+![Hallucination](/pix/AI_Hallucinating.png "Hallucination")
+
+Exit the chat session using the **/bye** command
+
+## Creating Local Knowledge
+
+Now create a "Private" data file that contains information the model couldn't possibly know.
+
+**Create a Text File**
+- Open the text editor (Gedit) and save a file named **m6_rules.txt**.
+
+**Input Data**
+- Type the following facts into the file:
+
+```
+Step 1: All GPUs must be cooled to below 70°C before shutdown.
+Step 2: Disconnect the CAT500G network cable.
+Step 3: Wait five minutes and enter the command STFU --now.
+```
+**Save and Close.**
+
+### Context Injection (Manual RAG)
+
+We will now "feed" this file into the model's short-term memory (Context Window) using a Linux "Pipe."
+
+```
+cat m6_rules.txt | ollama run granite4:3b "Using only the provided text, How do I shutdown the M6 Multitronic computer?"
+```
+
+The model should have a much better response.
+
+![Useful response](/pix/Lab4_Correct-Response.png "Useful Response")
+
+## Performance
+
+Adding data to a prompt costs and consumes hardware resources.
+
+- **Open nvtop** in a side window.
+- Copy and paste a large Wikipedia article and save into a text file.
+- Think of a question to ask that the article can answer
+- Pipe the file into the LLM with your question appended below
+
+```
+cat yourfile.txt \| ollama run granite4:3b "Using only the provided text, What is"
+```
+
+- Observe the **VRAM** usage in **nvtop**
+  As the "Context Window" (the amount of text you feed the AI) grows, the GPU has to work harder to "remember" the beginning of the text while reading the end.
+
+## Findings
+
+Answer the following:
+
+| **Question**       | **Student Observation**                                                         |
+|--------------------|---------------------------------------------------------------------------------|
+| **Initial Answer** | How did the model respond before it saw **m6_rules.txt**?                        |
+| **RAG Accuracy**   | Did the model follow the instruction "Using only the provided text"?            |
+| **Privacy**        | Explain why this method is safer for a hospital or law firm than using ChatGPT. |
+| **Hardware Limit** | Look at the GPU VRAM. If we fed it a 500-page book, what would happen?          |
+
+An LLM model is like a genius who has read the whole internet but has amnesia about your life. **RAG** is like handing that genius a single piece of paper. They don't "learn" the paper forever; they just hold it in their hand while answering your question.
+
+
+*Next Lab: [Ethics](9-Ethics.md)*
